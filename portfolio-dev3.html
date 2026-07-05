@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daniel Bertucciolli — Full Stack Developer</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0d1117;
+    --surface: #131a22;
+    --surface-2: #161b22;
+    --border: #262d38;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --violet: #a78bfa;
+    --cyan: #22d3ee;
+    --pink: #f778ba;
+    --green: #39d353;
+    --amber: #e3b341;
+    --kw: #ff7b72;
+    --str: #a5d6ff;
+    --fn: #d2a8ff;
+    --num: #79c0ff;
+    --cm: #6e7681;
+  }
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+  .font-display{ font-family: 'Space Grotesk', sans-serif; }
+  .font-mono{ font-family: 'JetBrains Mono', monospace; }
+
+  .grad-text{
+    background: linear-gradient(100deg, var(--violet), var(--cyan) 60%, var(--pink));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* ambient blobs */
+  .blob{
+    position: fixed;
+    border-radius: 9999px;
+    filter: blur(110px);
+    opacity: .22;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .blob-1{ width: 480px; height: 480px; background: var(--violet); top: -120px; left: -140px; animation: float1 22s ease-in-out infinite; }
+  .blob-2{ width: 420px; height: 420px; background: var(--cyan); bottom: -160px; right: -120px; animation: float2 26s ease-in-out infinite; }
+  @keyframes float1{ 0%,100%{ transform: translate(0,0); } 50%{ transform: translate(60px, 80px); } }
+  @keyframes float2{ 0%,100%{ transform: translate(0,0); } 50%{ transform: translate(-70px, -50px); } }
+
+  @media (prefers-reduced-motion: reduce){
+    .blob{ animation: none !important; }
+    *{ scroll-behavior: auto !important; }
+  }
+
+  /* nav */
+  .nav-blur{ backdrop-filter: blur(14px); background: rgba(13,17,23,.72); }
+  .nav-link{ position:relative; color: var(--muted); transition: color .2s; }
+  .nav-link:hover{ color: var(--text); }
+  .nav-link::after{
+    content:''; position:absolute; left:0; bottom:-4px; width:0; height:1px;
+    background: linear-gradient(90deg, var(--violet), var(--cyan));
+    transition: width .25s;
+  }
+  .nav-link:hover::after{ width: 100%; }
+
+  /* editor chrome */
+  .editor{
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,.7);
+  }
+  .editor-tab{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--muted);
+    border-right: 1px solid var(--border);
+  }
+  .editor-tab.active{
+    color: var(--text);
+    background: var(--surface);
+    border-bottom: 2px solid var(--cyan);
+  }
+  .line-no{ color: #484f58; user-select: none; text-align: right; }
+  .caret{
+    display:inline-block; width: 8px; height: 1.1em; background: var(--cyan);
+    vertical-align: text-bottom; animation: blink 1s step-end infinite;
+  }
+  @keyframes blink{ 50%{ opacity: 0; } }
+
+  /* reveal on scroll */
+  .reveal{ opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity: 1; transform: translateY(0); }
+
+  /* project card glow */
+  .glow-card{
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .glow-card::before{
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 14px;
+    padding: 1px;
+    background: radial-gradient(500px circle at var(--mx,50%) var(--my,50%), var(--violet), transparent 45%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity .3s;
+    pointer-events: none;
+  }
+  .glow-card:hover::before{ opacity: 1; }
+  .glow-card:hover{ transform: translateY(-4px); border-color: #3a4250; }
+  .glow-card{ transition: transform .3s, border-color .3s; }
+
+  .tag{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: rgba(255,255,255,.02);
+  }
+
+  /* skills pills */
+  .pill{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: border-color .25s, transform .25s, box-shadow .25s;
+  }
+  .pill:hover{
+    border-color: var(--violet);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -8px rgba(167,139,250,.5);
+  }
+
+  /* commit timeline */
+  .timeline-line{
+    background: linear-gradient(180deg, var(--violet), var(--cyan) 60%, transparent);
+  }
+  .commit-dot{
+    box-shadow: 0 0 0 4px var(--bg), 0 0 14px 2px rgba(34,211,238,.5);
+  }
+
+  .btn-grad{
+    background: linear-gradient(100deg, var(--violet), var(--cyan));
+    color: #0d1117;
+    font-weight: 600;
+  }
+  .btn-grad:hover{ filter: brightness(1.08); }
+
+  /* dropdown submenus */
+  .dropdown-wrap{ position: relative; }
+  .dropdown-panel{
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-6px);
+    min-width: 210px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 24px 60px -20px rgba(0,0,0,.75);
+    padding: 8px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .18s ease, transform .18s ease;
+    z-index: 60;
+  }
+  .dropdown-wrap.open .dropdown-panel{
+    opacity: 1; visibility: visible; pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+  .dropdown-item{
+    display: flex; align-items: center; gap: 9px;
+    width: 100%; text-align: left;
+    padding: 8px 10px; border-radius: 7px; font-size: 13px;
+    color: var(--muted); background: transparent; border: 0; cursor: pointer;
+    transition: background .15s, color .15s;
+  }
+  .dropdown-item:hover{ background: rgba(255,255,255,.05); color: var(--text); }
+  .dropdown-dot{ width: 6px; height: 6px; border-radius: 9999px; flex-shrink: 0; }
+  .chevron{ transition: transform .2s ease; display: inline-block; font-size: 10px; }
+  .dropdown-wrap.open .chevron{ transform: rotate(180deg); }
+
+  /* project filter */
+  .filter-chip{
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--violet);
+    border-radius: 8px;
+    padding: 5px 10px;
+  }
+  .project-card-hidden{ display: none; }
+
+  /* blog rows */
+  .blog-row{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    text-decoration: none;
+    color: inherit;
+    padding: 18px 20px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    transition: border-color .25s, background .25s;
+  }
+  .blog-row:hover{ border-color: var(--cyan); background: var(--surface-2); }
+  .blog-arrow{ transition: transform .25s ease, color .25s ease; color: var(--muted); }
+  .blog-row:hover .blog-arrow{ transform: translateX(4px); color: var(--cyan); }
+
+  /* testimonial carousel */
+  .carousel-track{
+    display: flex;
+    transition: transform .6s cubic-bezier(.65,.05,.36,1);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .carousel-track{ transition: none; }
+  }
+  .carousel-slide{
+    flex: 0 0 100%;
+    min-height: 300px;
+    padding: 56px 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #0d1117;
+  }
+  .quote-mark{
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 64px;
+    line-height: 1;
+    opacity: .3;
+    margin-bottom: 4px;
+  }
+  .testimonial-text{
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.45;
+    max-width: 620px;
+    margin-bottom: 26px;
+  }
+  .avatar-mono{
+    width: 42px; height: 42px;
+    border-radius: 9999px;
+    background: rgba(13,17,23,.16);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 12.5px;
+  }
+  .carousel-dot{
+    width: 8px; height: 8px;
+    border-radius: 9999px;
+    background: var(--border);
+    border: 0; padding: 0; cursor: pointer;
+    transition: background .2s ease, width .2s ease;
+  }
+  .carousel-dot.active{
+    width: 22px;
+    background: linear-gradient(90deg, var(--violet), var(--cyan));
+  }
+
+  ::selection{ background: rgba(167,139,250,.35); color: #fff; }
+  a:focus-visible, button:focus-visible{ outline: 2px solid var(--cyan); outline-offset: 3px; }
+
+  ::-webkit-scrollbar{ width: 10px; }
+  ::-webkit-scrollbar-track{ background: var(--bg); }
+  ::-webkit-scrollbar-thumb{ background: var(--border); border-radius: 6px; }
+</style>
+</head>
+<body class="relative">
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<!-- NAV -->
+<nav class="fixed top-0 inset-x-0 z-50 nav-blur border-b border-[#1c222c]">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="#top" class="font-mono text-sm text-[var(--text)]">
+      <span class="text-[var(--muted)]">~/</span>daniel<span class="grad-text">.dev</span>
+    </a>
+    <div class="hidden md:flex items-center gap-8 font-mono text-sm">
+      <a href="#about" class="nav-link">sobre</a>
+
+      <div class="dropdown-wrap" data-dropdown>
+        <button type="button" class="nav-link flex items-center gap-1 bg-transparent border-0 p-0 cursor-pointer font-mono text-sm" data-dropdown-trigger aria-expanded="false">
+          stack <span class="chevron">▾</span>
+        </button>
+        <div class="dropdown-panel" data-dropdown-panel>
+          <a href="#skill-frontend" class="dropdown-item"><span class="dropdown-dot" style="background:var(--cyan)"></span>Frontend</a>
+          <a href="#skill-backend" class="dropdown-item"><span class="dropdown-dot" style="background:var(--violet)"></span>Backend</a>
+          <a href="#skill-tools" class="dropdown-item"><span class="dropdown-dot" style="background:var(--pink)"></span>Tools &amp; deploy</a>
+        </div>
+      </div>
+
+      <div class="dropdown-wrap" data-dropdown>
+        <button type="button" class="nav-link flex items-center gap-1 bg-transparent border-0 p-0 cursor-pointer font-mono text-sm" data-dropdown-trigger aria-expanded="false">
+          projetos <span class="chevron">▾</span>
+        </button>
+        <div class="dropdown-panel" data-dropdown-panel>
+          <button type="button" class="dropdown-item" data-filter="todos"><span class="dropdown-dot" style="background:var(--muted)"></span>Todos</button>
+          <button type="button" class="dropdown-item" data-filter="institucional"><span class="dropdown-dot" style="background:var(--cyan)"></span>Institucionais</button>
+          <button type="button" class="dropdown-item" data-filter="ferramenta"><span class="dropdown-dot" style="background:var(--green)"></span>Ferramentas</button>
+          <button type="button" class="dropdown-item" data-filter="design-system"><span class="dropdown-dot" style="background:var(--violet)"></span>Design system</button>
+        </div>
+      </div>
+
+      <a href="#experience" class="nav-link">log</a>
+      <a href="#blog" class="nav-link">blog</a>
+      <a href="#testimonials" class="nav-link">depoimentos</a>
+      <a href="#contact" class="nav-link">contato</a>
+    </div>
+    <a href="#contact" class="hidden md:inline-block px-4 py-2 rounded-lg btn-grad text-sm">$ contratar</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="top" class="relative z-10 max-w-6xl mx-auto px-6 pt-36 pb-24 grid md:grid-cols-2 gap-12 items-center">
+  <div>
+    <p class="font-mono text-sm text-[var(--cyan)] mb-4">// full stack developer</p>
+    <h1 class="font-display text-4xl sm:text-5xl font-bold leading-tight mb-6">
+      Eu transformo <span class="grad-text">ideias</span> em produtos que <span class="grad-text">rodam em produção</span>.
+    </h1>
+    <p class="text-[var(--muted)] text-lg leading-relaxed mb-8 max-w-lg">
+      Daniel Bertucciolli — desenvolvedor full stack focado em interfaces rápidas, backends confiáveis
+      e detalhes que fazem um produto parecer terminado.
+    </p>
+    <div class="flex flex-wrap gap-4">
+      <a href="#projects" class="px-5 py-3 rounded-lg btn-grad text-sm font-mono">ver_projetos()</a>
+      <a href="#contact" class="px-5 py-3 rounded-lg border border-[var(--border)] text-sm font-mono text-[var(--text)] hover:border-[var(--violet)] transition-colors">contato.enviar()</a>
+    </div>
+  </div>
+
+  <div class="editor" id="hero-editor">
+    <div class="flex items-center px-4 pt-3">
+      <div class="flex gap-1.5 mr-4">
+        <span class="w-3 h-3 rounded-full bg-[#ff5f56]"></span>
+        <span class="w-3 h-3 rounded-full bg-[#ffbd2e]"></span>
+        <span class="w-3 h-3 rounded-full bg-[#27c93f]"></span>
+      </div>
+      <div class="flex">
+        <div class="editor-tab active px-3 py-2">perfil.js</div>
+        <div class="editor-tab px-3 py-2 opacity-60">README.md</div>
+      </div>
+    </div>
+    <div class="p-5 font-mono text-[13px] leading-6 overflow-x-auto min-h-[220px]" id="hero-code"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="relative z-10 max-w-6xl mx-auto px-6 py-20 reveal scroll-mt-24">
+  <div class="grid md:grid-cols-[100px_1fr] gap-8">
+    <p class="font-mono text-sm text-[var(--muted)]">01 / sobre</p>
+    <div class="editor max-w-2xl">
+      <div class="flex items-center px-4 pt-3">
+        <div class="editor-tab active px-3 py-2">README.md</div>
+      </div>
+      <div class="p-6 font-mono text-sm leading-7 text-[var(--muted)]">
+        <p class="text-[var(--text)] font-display text-xl font-semibold mb-3"># Sobre mim</p>
+        <p class="mb-4">Trabalho na fronteira entre <span class="text-[var(--text)]">frontend</span> e
+        <span class="text-[var(--text)]">backend</span>: já entreguei desde validadores de boleto bancário
+        até sites institucionais completos, sempre cuidando de performance, segurança e da experiência de quem usa.</p>
+        <p>Gosto de projetos sem atalhos — código organizado, decisões de arquitetura justificadas
+        e um resultado visual que representa bem a marca do cliente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="relative z-10 max-w-6xl mx-auto px-6 py-20 reveal scroll-mt-24">
+  <div class="grid md:grid-cols-[100px_1fr] gap-8">
+    <p class="font-mono text-sm text-[var(--muted)]">02 / stack</p>
+    <div>
+      <h2 class="font-display text-2xl font-semibold mb-8">package.json <span class="text-[var(--muted)] font-mono text-base">— dependencies</span></h2>
+
+      <p class="font-mono text-xs text-[var(--amber)] mb-3">"frontend": {</p>
+      <div id="skill-frontend" class="flex flex-wrap gap-3 mb-6 pl-4 scroll-mt-28">
+        <span class="pill">JavaScript</span>
+        <span class="pill">React</span>
+        <span class="pill">Tailwind CSS</span>
+        <span class="pill">HTML5 / CSS3</span>
+        <span class="pill">Alpine.js</span>
+      </div>
+
+      <p class="font-mono text-xs text-[var(--amber)] mb-3">"backend": {</p>
+      <div id="skill-backend" class="flex flex-wrap gap-3 mb-6 pl-4 scroll-mt-28">
+        <span class="pill">Node.js</span>
+        <span class="pill">Wix Velo</span>
+        <span class="pill">REST APIs</span>
+        <span class="pill">SQL</span>
+      </div>
+
+      <p class="font-mono text-xs text-[var(--amber)] mb-3">"tooling": {</p>
+      <div id="skill-tools" class="flex flex-wrap gap-3 pl-4 scroll-mt-28">
+        <span class="pill">Git / GitHub</span>
+        <span class="pill">Segurança &amp; domínios</span>
+        <span class="pill">SEO técnico</span>
+        <span class="pill">Figma</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="relative z-10 max-w-6xl mx-auto px-6 py-20 reveal scroll-mt-24">
+  <div class="grid md:grid-cols-[100px_1fr] gap-8">
+    <p class="font-mono text-sm text-[var(--muted)]">03 / projetos</p>
+    <div class="w-full">
+      <div id="filter-status" class="hidden items-center gap-2 mb-6 font-mono text-xs text-[var(--muted)]">
+        <span>mostrando:</span>
+        <span id="filter-label" class="filter-chip"></span>
+        <button id="filter-clear" type="button" class="text-[var(--muted)] hover:text-[var(--text)] underline bg-transparent border-0 cursor-pointer p-0">limpar filtro</button>
+      </div>
+      <div id="projects-grid" class="grid sm:grid-cols-2 gap-6">
+
+      <div class="glow-card p-6" data-tilt data-cat="ferramenta">
+        <p class="font-mono text-xs text-[var(--green)] mb-2">● produção</p>
+        <h3 class="font-display text-lg font-semibold mb-2">Validador de Boletos Bancários</h3>
+        <p class="text-sm text-[var(--muted)] mb-4 leading-relaxed">Módulo de validação (10/11) com parsing de campo livre específico por banco, integrado via Wix Velo.</p>
+        <div class="flex flex-wrap gap-2 mb-4">
+          <span class="tag">Velo</span><span class="tag">JavaScript</span><span class="tag">Validação bancária</span>
+        </div>
+        <a href="#" class="font-mono text-sm text-[var(--cyan)] hover:underline">ver_detalhes →</a>
+      </div>
+
+      <div class="glow-card p-6" data-tilt data-cat="institucional">
+        <p class="font-mono text-xs text-[var(--green)] mb-2">● produção</p>
+        <h3 class="font-display text-lg font-semibold mb-2">Site Institucional — Escritório de Advocacia</h3>
+        <p class="text-sm text-[var(--muted)] mb-4 leading-relaxed">Site completo em Tailwind, tema escuro com paleta vermelho/dourado, hero em carrossel e animações de scroll.</p>
+        <div class="flex flex-wrap gap-2 mb-4">
+          <span class="tag">Tailwind CSS</span><span class="tag">Wix</span><span class="tag">Dark theme</span>
+        </div>
+        <a href="#" class="font-mono text-sm text-[var(--cyan)] hover:underline">ver_detalhes →</a>
+      </div>
+
+      <div class="glow-card p-6" data-tilt data-cat="institucional">
+        <p class="font-mono text-xs text-[var(--green)] mb-2">● produção</p>
+        <h3 class="font-display text-lg font-semibold mb-2">Station Informática — Site + Loja</h3>
+        <p class="text-sm text-[var(--muted)] mb-4 leading-relaxed">Site institucional com glassmorphism, tipografia Plus Jakarta Sans e página de vendas com filtros de categoria.</p>
+        <div class="flex flex-wrap gap-2 mb-4">
+          <span class="tag">Glassmorphism</span><span class="tag">UX</span><span class="tag">Filtros</span>
+        </div>
+        <a href="#" class="font-mono text-sm text-[var(--cyan)] hover:underline">ver_detalhes →</a>
+      </div>
+
+      <div class="glow-card p-6" data-tilt data-cat="design-system">
+        <p class="font-mono text-xs text-[var(--amber)] mb-2">● em progresso</p>
+        <h3 class="font-display text-lg font-semibold mb-2">GitHub Dark UI Kit</h3>
+        <p class="text-sm text-[var(--muted)] mb-4 leading-relaxed">Biblioteca de componentes Tailwind no tema GitHub Dark, self-contained, pronta para copiar e colar.</p>
+        <div class="flex flex-wrap gap-2 mb-4">
+          <span class="tag">Design system</span><span class="tag">Tailwind CDN</span><span class="tag">Vanilla JS</span>
+        </div>
+        <a href="#" class="font-mono text-sm text-[var(--cyan)] hover:underline">ver_detalhes →</a>
+      </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE / GIT LOG -->
+<section id="experience" class="relative z-10 max-w-6xl mx-auto px-6 py-20 reveal scroll-mt-24">
+  <div class="grid md:grid-cols-[100px_1fr] gap-8">
+    <p class="font-mono text-sm text-[var(--muted)]">04 / log</p>
+    <div>
+      <h2 class="font-display text-2xl font-semibold mb-10">git log --graph --oneline</h2>
+      <div class="relative pl-8">
+        <div class="absolute left-[7px] top-2 bottom-2 w-px timeline-line"></div>
+
+        <div class="relative mb-10">
+          <span class="absolute -left-8 top-1 w-3.5 h-3.5 rounded-full bg-[var(--cyan)] commit-dot"></span>
+          <p class="font-mono text-xs text-[var(--muted)] mb-1">a4f21c9 · jul 2026</p>
+          <h3 class="font-display font-semibold mb-1">Consultoria técnica — Perez de Rezende Advogados</h3>
+          <p class="text-sm text-[var(--muted)]">Avaliação de segurança, configuração de domínio e estimativas de esforço para infraestrutura Wix.</p>
+        </div>
+
+        <div class="relative mb-10">
+          <span class="absolute -left-8 top-1 w-3.5 h-3.5 rounded-full bg-[var(--violet)] commit-dot"></span>
+          <p class="font-mono text-xs text-[var(--muted)] mb-1">9c02e77 · 2025</p>
+          <h3 class="font-display font-semibold mb-1">Desenvolvimento full stack — projetos freelance</h3>
+          <p class="text-sm text-[var(--muted)]">Sites institucionais, dashboards e integrações sob medida para clientes de diferentes setores.</p>
+        </div>
+
+        <div class="relative">
+          <span class="absolute -left-8 top-1 w-3.5 h-3.5 rounded-full bg-[var(--pink)] commit-dot"></span>
+          <p class="font-mono text-xs text-[var(--muted)] mb-1">1a0083b · início</p>
+          <h3 class="font-display font-semibold mb-1">Primeiros commits</h3>
+          <p class="text-sm text-[var(--muted)]">Início da jornada em desenvolvimento web, aprendendo HTML, CSS e JavaScript na prática.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOG -->
+<section id="blog" class="relative z-10 max-w-6xl mx-auto px-6 py-20 reveal scroll-mt-24">
+  <div class="grid md:grid-cols-[100px_1fr] gap-8">
+    <p class="font-mono text-sm text-[var(--muted)]">05 / blog</p>
+    <div>
+      <h2 class="font-display text-2xl font-semibold mb-2">~/blog <span class="text-[var(--muted)] font-mono text-base">$ ls -la posts/</span></h2>
+      <p class="text-sm text-[var(--muted)] mb-8">Anotações sobre o que aprendo construindo coisas de verdade.</p>
+
+      <div class="flex flex-col gap-4">
+
+        <a href="#" class="blog-row">
+          <div class="min-w-0">
+            <p class="font-mono text-sm text-[var(--text)] mb-1 truncate">📄 por-que-abandonei-build-tools.md</p>
+            <p class="text-sm text-[var(--muted)] mb-2">Como projetos pequenos ficam mais rápidos de entregar só com Tailwind CDN e JS puro.</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="tag">Tailwind</span><span class="tag">Vanilla JS</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 flex-shrink-0">
+            <span class="font-mono text-xs text-[var(--muted)] hidden sm:block">28 jun 2026 · 6 min</span>
+            <span class="blog-arrow font-mono text-lg">→</span>
+          </div>
+        </a>
+
+        <a href="#" class="blog-row">
+          <div class="min-w-0">
+            <p class="font-mono text-sm text-[var(--text)] mb-1 truncate">📄 modulo-11-boletos-o-que-ninguem-conta.md</p>
+            <p class="text-sm text-[var(--muted)] mb-2">Os detalhes do campo livre que quebram a validação se você não prestar atenção.</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="tag">Backend</span><span class="tag">Validação bancária</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 flex-shrink-0">
+            <span class="font-mono text-xs text-[var(--muted)] hidden sm:block">14 mai 2026 · 8 min</span>
+            <span class="blog-arrow font-mono text-lg">→</span>
+          </div>
+        </a>
+
+        <a href="#" class="blog-row">
+          <div class="min-w-0">
+            <p class="font-mono text-sm text-[var(--text)] mb-1 truncate">📄 nota-a-no-securityscorecard-nem-sempre.md</p>
+            <p class="text-sm text-[var(--muted)] mb-2">Por que a infraestrutura do site às vezes limita o quanto você consegue subir a nota.</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="tag">Segurança</span><span class="tag">Wix</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 flex-shrink-0">
+            <span class="font-mono text-xs text-[var(--muted)] hidden sm:block">02 abr 2026 · 5 min</span>
+            <span class="blog-arrow font-mono text-lg">→</span>
+          </div>
+        </a>
+
+        <a href="#" class="blog-row">
+          <div class="min-w-0">
+            <p class="font-mono text-sm text-[var(--text)] mb-1 truncate">📄 glassmorphism-sem-exagero.md</p>
+            <p class="text-sm text-[var(--muted)] mb-2">Como usei o efeito com moderação em um site de loja sem pesar a leitura.</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="tag">UI</span><span class="tag">CSS</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 flex-shrink-0">
+            <span class="font-mono text-xs text-[var(--muted)] hidden sm:block">19 mar 2026 · 4 min</span>
+            <span class="blog-arrow font-mono text-lg">→</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS CAROUSEL -->
+<section id="testimonials" class="relative z-10 max-w-6xl mx-auto px-6 py-20 reveal scroll-mt-24">
+  <div class="grid md:grid-cols-[100px_1fr] gap-8">
+    <p class="font-mono text-sm text-[var(--muted)]">06 / depoimentos</p>
+    <div>
+      <h2 class="font-display text-2xl font-semibold mb-8">o que dizem sobre o trabalho</h2>
+
+      <div id="carousel" class="relative rounded-2xl overflow-hidden border border-[var(--border)]" tabindex="0" aria-roledescription="carousel" aria-label="Depoimentos de clientes">
+        <div id="carousel-track" class="carousel-track">
+
+          <div class="carousel-slide" style="background: linear-gradient(135deg, var(--violet), var(--cyan))">
+            <p class="quote-mark">&ldquo;</p>
+            <p class="testimonial-text">O site ficou muito além do que a gente esperava — rápido, bonito e fácil de manter o conteúdo no dia a dia.</p>
+            <div class="flex items-center gap-3">
+              <span class="avatar-mono">PR</span>
+              <div>
+                <p class="font-mono text-sm font-semibold">Sócio(a)</p>
+                <p class="font-mono text-xs opacity-70">Perez de Rezende Advogados</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="carousel-slide" style="background: linear-gradient(135deg, var(--pink), var(--amber))">
+            <p class="quote-mark">&ldquo;</p>
+            <p class="testimonial-text">Resolveu um problema de validação que vinha nos dando dor de cabeça há meses, sem gambiarra.</p>
+            <div class="flex items-center gap-3">
+              <span class="avatar-mono">VB</span>
+              <div>
+                <p class="font-mono text-sm font-semibold">Parceiro técnico</p>
+                <p class="font-mono text-xs opacity-70">Projeto de validação bancária</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="carousel-slide" style="background: linear-gradient(135deg, var(--cyan), var(--green))">
+            <p class="quote-mark">&ldquo;</p>
+            <p class="testimonial-text">Entendeu o que a loja precisava sem que a gente tivesse que explicar tudo em detalhes.</p>
+            <div class="flex items-center gap-3">
+              <span class="avatar-mono">SI</span>
+              <div>
+                <p class="font-mono text-sm font-semibold">Gerência</p>
+                <p class="font-mono text-xs opacity-70">Station Informática</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="carousel-slide" style="background: linear-gradient(135deg, var(--violet), var(--pink))">
+            <p class="quote-mark">&ldquo;</p>
+            <p class="testimonial-text">Comunicação clara do início ao fim, e o prazo foi cumprido sem surpresas.</p>
+            <div class="flex items-center gap-3">
+              <span class="avatar-mono">CR</span>
+              <div>
+                <p class="font-mono text-sm font-semibold">Cliente recorrente</p>
+                <p class="font-mono text-xs opacity-70">Projeto sob NDA</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <button id="carousel-prev" aria-label="Depoimento anterior" class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/30 backdrop-blur-sm border border-white/15 text-white flex items-center justify-center transition-all hover:bg-black/50 hover:scale-105">‹</button>
+        <button id="carousel-next" aria-label="Próximo depoimento" class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/30 backdrop-blur-sm border border-white/15 text-white flex items-center justify-center transition-all hover:bg-black/50 hover:scale-105">›</button>
+      </div>
+
+      <div id="carousel-dots" class="flex justify-center gap-2 mt-6"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="relative z-10 max-w-6xl mx-auto px-6 py-24 reveal scroll-mt-24">
+  <div class="editor max-w-2xl mx-auto">
+    <div class="flex items-center px-4 pt-3">
+      <div class="flex gap-1.5 mr-4">
+        <span class="w-3 h-3 rounded-full bg-[#ff5f56]"></span>
+        <span class="w-3 h-3 rounded-full bg-[#ffbd2e]"></span>
+        <span class="w-3 h-3 rounded-full bg-[#27c93f]"></span>
+      </div>
+      <div class="editor-tab active px-3 py-2">terminal</div>
+    </div>
+    <div class="p-6 font-mono text-sm leading-7">
+      <p class="text-[var(--muted)]">$ <span class="text-[var(--text)]">contato --info</span></p>
+      <p class="mt-2"><span class="text-[var(--fn)]">email</span>: <a href="mailto:contato@danielbertucciolli.dev" class="text-[var(--str)] hover:underline">contato@danielbertucciolli.dev</a></p>
+      <p><span class="text-[var(--fn)]">github</span>: <a href="#" class="text-[var(--str)] hover:underline">github.com/danielbertucciolli</a></p>
+      <p><span class="text-[var(--fn)]">linkedin</span>: <a href="#" class="text-[var(--str)] hover:underline">linkedin.com/in/danielbertucciolli</a></p>
+      <p class="mt-4 text-[var(--muted)]">$ <span class="text-[var(--text)]">status</span></p>
+      <p class="text-[var(--green)]">✓ disponível para novos projetos</p>
+      <p class="mt-4">$ <span class="caret"></span></p>
+    </div>
+  </div>
+</section>
+
+<footer class="relative z-10 border-t border-[#1c222c] py-8">
+  <p class="text-center font-mono text-xs text-[var(--muted)]">© 2026 Daniel Bertucciolli — feito com Tailwind &amp; café.</p>
+</footer>
+
+<script>
+  // ---- hero typing effect ----
+  const codeLines = [
+    { n: 1, html: '<span style="color:var(--kw)">const</span> <span style="color:var(--text)">developer</span> = {' },
+    { n: 2, html: '&nbsp;&nbsp;<span style="color:var(--fn)">name</span>: <span style="color:var(--str)">"Daniel Bertucciolli"</span>,' },
+    { n: 3, html: '&nbsp;&nbsp;<span style="color:var(--fn)">role</span>: <span style="color:var(--str)">"Full Stack Developer"</span>,' },
+    { n: 4, html: '&nbsp;&nbsp;<span style="color:var(--fn)">stack</span>: [<span style="color:var(--str)">"JS"</span>, <span style="color:var(--str)">"Node"</span>, <span style="color:var(--str)">"Tailwind"</span>],' },
+    { n: 5, html: '&nbsp;&nbsp;<span style="color:var(--fn)">focus</span>: <span style="color:var(--str)">"detalhes que importam"</span>,' },
+    { n: 6, html: '&nbsp;&nbsp;<span style="color:var(--fn)">available</span>: <span style="color:var(--num)">true</span>' },
+    { n: 7, html: '};' },
+  ];
+
+  const container = document.getElementById('hero-code');
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function renderStatic(){
+    container.innerHTML = codeLines.map(l =>
+      `<div class="flex gap-4"><span class="line-no w-5">${l.n}</span><span>${l.html}</span></div>`
+    ).join('');
+  }
+
+  function typeLines(){
+    let i = 0;
+    function next(){
+      if(i >= codeLines.length){
+        const caretRow = document.createElement('div');
+        caretRow.className = 'flex gap-4';
+        caretRow.innerHTML = `<span class="line-no w-5">${codeLines.length+1}</span><span class="caret"></span>`;
+        container.appendChild(caretRow);
+        return;
+      }
+      const row = document.createElement('div');
+      row.className = 'flex gap-4';
+      const numSpan = document.createElement('span');
+      numSpan.className = 'line-no w-5';
+      numSpan.textContent = codeLines[i].n;
+      const textSpan = document.createElement('span');
+      row.appendChild(numSpan);
+      row.appendChild(textSpan);
+      container.appendChild(row);
+
+      const full = codeLines[i].html;
+      textSpan.innerHTML = full;
+      row.style.opacity = 0;
+      requestAnimationFrame(() => {
+        row.style.transition = 'opacity .25s';
+        row.style.opacity = 1;
+      });
+      i++;
+      setTimeout(next, 180);
+    }
+    next();
+  }
+
+  if(prefersReduced){ renderStatic(); } else { typeLines(); }
+
+  // ---- scroll reveal ----
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ---- glow card mouse tracking ----
+  document.querySelectorAll('.glow-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+      card.style.setProperty('--my', `${e.clientY - rect.top}px`);
+    });
+  });
+
+  // ---- dropdown submenus (hover + click) ----
+  const dropdowns = document.querySelectorAll('[data-dropdown]');
+  const closeTimers = new Map();
+
+  function closeDropdown(d){
+    d.classList.remove('open');
+    const trigger = d.querySelector('[data-dropdown-trigger]');
+    if(trigger) trigger.setAttribute('aria-expanded', 'false');
+  }
+  function closeAllDropdowns(except){
+    dropdowns.forEach(d => { if(d !== except) closeDropdown(d); });
+  }
+  function openDropdown(d){
+    clearTimeout(closeTimers.get(d));
+    closeAllDropdowns(d);
+    d.classList.add('open');
+    const trigger = d.querySelector('[data-dropdown-trigger]');
+    if(trigger) trigger.setAttribute('aria-expanded', 'true');
+  }
+
+  dropdowns.forEach(d => {
+    const trigger = d.querySelector('[data-dropdown-trigger]');
+
+    d.addEventListener('mouseenter', () => openDropdown(d));
+    d.addEventListener('mouseleave', () => {
+      const t = setTimeout(() => closeDropdown(d), 200);
+      closeTimers.set(d, t);
+    });
+
+    if(trigger){
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = d.classList.contains('open');
+        closeAllDropdowns();
+        if(!isOpen) openDropdown(d);
+      });
+    }
+  });
+
+  document.addEventListener('click', () => closeAllDropdowns());
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeAllDropdowns(); });
+  document.querySelectorAll('.dropdown-panel a').forEach(a => {
+    a.addEventListener('click', () => closeAllDropdowns());
+  });
+
+  // ---- project filter (from "projetos" dropdown) ----
+  const projectCards = document.querySelectorAll('#projects-grid .glow-card');
+  const filterStatus = document.getElementById('filter-status');
+  const filterLabel = document.getElementById('filter-label');
+  const filterNames = { todos: 'Todos', institucional: 'Institucionais', ferramenta: 'Ferramentas', 'design-system': 'Design system' };
+
+  function applyFilter(cat){
+    projectCards.forEach(card => {
+      const match = cat === 'todos' || card.dataset.cat === cat;
+      card.style.transition = 'opacity .25s ease, transform .25s ease';
+      if(match){
+        card.classList.remove('project-card-hidden');
+        requestAnimationFrame(() => { card.style.opacity = '1'; card.style.transform = 'scale(1)'; });
+      } else {
+        card.style.opacity = '0';
+        card.style.transform = 'scale(.96)';
+        setTimeout(() => card.classList.add('project-card-hidden'), 250);
+      }
+    });
+    if(cat === 'todos'){
+      filterStatus.classList.add('hidden');
+      filterStatus.classList.remove('flex');
+    } else {
+      filterLabel.textContent = filterNames[cat] || cat;
+      filterStatus.classList.remove('hidden');
+      filterStatus.classList.add('flex');
+    }
+  }
+
+  document.querySelectorAll('[data-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      applyFilter(btn.dataset.filter);
+      closeAllDropdowns();
+      document.getElementById('projects').scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth' });
+    });
+  });
+
+  const filterClear = document.getElementById('filter-clear');
+  if(filterClear) filterClear.addEventListener('click', () => applyFilter('todos'));
+
+  // ---- testimonial carousel ----
+  const carouselEl = document.getElementById('carousel');
+  const track = document.getElementById('carousel-track');
+  const dotsWrap = document.getElementById('carousel-dots');
+  const slides = track ? Array.from(track.children) : [];
+  let current = 0;
+  let autoplayTimer = null;
+
+  function goTo(index){
+    current = (index + slides.length) % slides.length;
+    track.style.transform = `translateX(-${current * 100}%)`;
+    Array.from(dotsWrap.children).forEach((dot, i) => dot.classList.toggle('active', i === current));
+  }
+  function nextSlide(){ goTo(current + 1); }
+  function prevSlide(){ goTo(current - 1); }
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', `Ir para depoimento ${i + 1}`);
+    dot.addEventListener('click', () => { goTo(i); resetAutoplay(); });
+    dotsWrap.appendChild(dot);
+  });
+
+  function startAutoplay(){
+    if(prefersReduced || slides.length < 2) return;
+    autoplayTimer = setInterval(nextSlide, 6000);
+  }
+  function stopAutoplay(){ clearInterval(autoplayTimer); }
+  function resetAutoplay(){ stopAutoplay(); startAutoplay(); }
+
+  const prevBtn = document.getElementById('carousel-prev');
+  const nextBtn = document.getElementById('carousel-next');
+  if(prevBtn) prevBtn.addEventListener('click', () => { prevSlide(); resetAutoplay(); });
+  if(nextBtn) nextBtn.addEventListener('click', () => { nextSlide(); resetAutoplay(); });
+
+  if(carouselEl){
+    carouselEl.addEventListener('mouseenter', stopAutoplay);
+    carouselEl.addEventListener('mouseleave', startAutoplay);
+    carouselEl.addEventListener('keydown', (e) => {
+      if(e.key === 'ArrowRight'){ nextSlide(); resetAutoplay(); }
+      if(e.key === 'ArrowLeft'){ prevSlide(); resetAutoplay(); }
+    });
+
+    let touchStartX = 0;
+    carouselEl.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+    carouselEl.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if(Math.abs(dx) > 40){ dx < 0 ? nextSlide() : prevSlide(); resetAutoplay(); }
+    });
+  }
+
+  startAutoplay();
+</script>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Por que abandonei build tools em projetos pequenos — daniel.dev</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0d1117;
+    --surface: #131a22;
+    --surface-2: #161b22;
+    --border: #262d38;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --violet: #a78bfa;
+    --cyan: #22d3ee;
+    --pink: #f778ba;
+    --green: #39d353;
+    --amber: #e3b341;
+    --kw: #ff7b72;
+    --str: #a5d6ff;
+    --fn: #d2a8ff;
+    --num: #79c0ff;
+    --cm: #6e7681;
+  }
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{ background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+  .font-display{ font-family: 'Space Grotesk', sans-serif; }
+  .font-mono{ font-family: 'JetBrains Mono', monospace; }
+
+  .grad-text{
+    background: linear-gradient(100deg, var(--violet), var(--cyan) 60%, var(--pink));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+
+  .blob{ position: fixed; border-radius: 9999px; filter: blur(110px); opacity: .2; z-index: 0; pointer-events: none; }
+  .blob-1{ width: 460px; height: 460px; background: var(--violet); top: -140px; left: -120px; }
+  .blob-2{ width: 420px; height: 420px; background: var(--cyan); bottom: -160px; right: -120px; }
+
+  @media (prefers-reduced-motion: reduce){ *{ scroll-behavior: auto !important; } }
+
+  .nav-blur{ backdrop-filter: blur(14px); background: rgba(13,17,23,.72); }
+  .nav-link{ position:relative; color: var(--muted); transition: color .2s; }
+  .nav-link:hover{ color: var(--text); }
+
+  #progress-bar{
+    position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+    background: linear-gradient(90deg, var(--violet), var(--cyan), var(--pink));
+    z-index: 70; transition: width .1s linear;
+  }
+
+  .editor{ background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 30px 80px -30px rgba(0,0,0,.7); }
+  .editor-tab{ font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--muted); border-right: 1px solid var(--border); }
+  .editor-tab.active{ color: var(--text); background: var(--surface); border-bottom: 2px solid var(--cyan); }
+  .line-no{ color: #484f58; user-select: none; text-align: right; }
+
+  .reveal{ opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity: 1; transform: translateY(0); }
+
+  .tag{
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 3px 8px; border-radius: 6px;
+    border: 1px solid var(--border); color: var(--muted); background: rgba(255,255,255,.02);
+  }
+
+  /* article typography */
+  .article-body p{ font-size: 17px; line-height: 1.85; color: var(--text); margin-bottom: 22px; }
+  .article-body h2{ font-family: 'Space Grotesk', sans-serif; font-size: 25px; font-weight: 600; margin-top: 52px; margin-bottom: 18px; }
+  .article-body strong{ color: var(--text); }
+
+  .drop-cap::first-letter{
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 58px; font-weight: 700; float: left; line-height: .8;
+    margin-right: 10px; margin-top: 8px;
+    background: linear-gradient(135deg, var(--violet), var(--cyan));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+
+  .margin-note{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px; line-height: 1.65; color: var(--muted);
+    border-left: 2px solid var(--violet);
+    padding: 2px 0 2px 14px;
+    margin-top: 14px;
+  }
+  @media (min-width: 1024px){
+    .margin-note{ margin-top: 2px; }
+  }
+
+  .pull-quote{
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 27px; font-weight: 600; line-height: 1.4;
+    margin: 46px 0; padding-left: 26px;
+    border-left: 3px solid transparent;
+    border-image: linear-gradient(180deg, var(--violet), var(--cyan)) 1;
+  }
+
+  figure{ margin: 0; }
+  figcaption{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px; color: var(--muted);
+    margin-top: 12px; font-style: italic;
+  }
+
+  .avatar-mono{
+    width: 46px; height: 46px; border-radius: 9999px;
+    background: linear-gradient(135deg, var(--violet), var(--cyan));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; color: #0d1117;
+  }
+
+  .blog-row{
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    text-decoration: none; color: inherit;
+    padding: 16px 18px; border: 1px solid var(--border); border-radius: 10px;
+    background: var(--surface); transition: border-color .25s, background .25s;
+  }
+  .blog-row:hover{ border-color: var(--cyan); background: var(--surface-2); }
+  .blog-arrow{ transition: transform .25s ease, color .25s ease; color: var(--muted); }
+  .blog-row:hover .blog-arrow{ transform: translateX(4px); color: var(--cyan); }
+
+  ::selection{ background: rgba(167,139,250,.35); color: #fff; }
+  a:focus-visible, button:focus-visible{ outline: 2px solid var(--cyan); outline-offset: 3px; }
+  ::-webkit-scrollbar{ width: 10px; }
+  ::-webkit-scrollbar-track{ background: var(--bg); }
+  ::-webkit-scrollbar-thumb{ background: var(--border); border-radius: 6px; }
+</style>
+</head>
+<body class="relative">
+
+<div id="progress-bar"></div>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<!-- NAV -->
+<nav class="fixed top-0 inset-x-0 z-50 nav-blur border-b border-[#1c222c]">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="portfolio-dev.html" class="font-mono text-sm text-[var(--text)] flex items-center gap-2">
+      <span class="text-[var(--cyan)]">←</span>
+      <span class="text-[var(--muted)]">~/</span>daniel<span class="grad-text">.dev</span>
+    </a>
+    <a href="portfolio-dev.html#blog" class="font-mono text-sm nav-link">voltar ao blog</a>
+  </div>
+</nav>
+
+<!-- ARTICLE HEADER -->
+<header class="relative z-10 max-w-3xl mx-auto px-6 pt-36 pb-10 reveal">
+  <p class="font-mono text-xs text-[var(--cyan)] mb-4">blog / ferramentas</p>
+  <h1 class="font-display text-3xl sm:text-4xl font-bold leading-tight mb-5">
+    Por que abandonei <span class="grad-text">build tools</span> em projetos pequenos
+  </h1>
+  <div class="flex flex-wrap items-center gap-4 font-mono text-xs text-[var(--muted)] mb-4">
+    <span>28 jun 2026</span>
+    <span>·</span>
+    <span>6 min de leitura</span>
+  </div>
+  <div class="flex flex-wrap gap-2">
+    <span class="tag">Tailwind</span><span class="tag">Vanilla JS</span><span class="tag">Ferramentas</span>
+  </div>
+</header>
+
+<!-- HERO IMAGE (SVG original) -->
+<div class="relative z-10 max-w-3xl mx-auto px-6 mb-16 reveal">
+  <svg viewBox="0 0 900 380" class="w-full h-auto rounded-2xl border border-[var(--border)]" style="background:var(--surface-2)">
+    <defs>
+      <linearGradient id="heroGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="var(--violet)" stop-opacity="0.35"/>
+        <stop offset="55%" stop-color="var(--cyan)" stop-opacity="0.25"/>
+        <stop offset="100%" stop-color="var(--pink)" stop-opacity="0.25"/>
+      </linearGradient>
+    </defs>
+    <rect width="900" height="380" fill="url(#heroGrad)"/>
+    <circle cx="150" cy="90" r="130" fill="var(--violet)" opacity="0.18"/>
+    <circle cx="760" cy="300" r="160" fill="var(--cyan)" opacity="0.16"/>
+    <circle cx="700" cy="70" r="70" fill="var(--pink)" opacity="0.18"/>
+    <text x="450" y="205" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="46" font-weight="700" fill="var(--text)" opacity="0.9">&lt;/&gt;</text>
+    <text x="450" y="245" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="var(--muted)">zero build steps</text>
+  </svg>
+</div>
+
+<!-- ARTICLE BODY -->
+<article class="relative z-10 max-w-3xl mx-auto px-6 pb-24">
+  <div class="article-body">
+
+    <p class="drop-cap reveal">Todo projeto pequeno chega numa encruzilhada: montar uma esteira completa de build — bundler, transpiler, linter, hot reload — ou simplesmente abrir um arquivo HTML e começar a escrever. Depois de alguns anos escolhendo sempre a primeira opção "porque é o correto", comecei a questionar se isso realmente valia o tempo em projetos que não precisavam de nada disso.</p>
+
+    <h2>O problema que build tools resolvem (e o que custam)</h2>
+
+    <div class="lg:grid lg:grid-cols-[1fr_210px] lg:gap-10">
+      <p>Bundlers existem para resolver problemas reais: dividir código em pedaços menores, otimizar assets, permitir imports entre arquivos, transformar sintaxes modernas para navegadores antigos. O problema é que esse valor só aparece a partir de um certo tamanho de projeto — e a maioria dos sites institucionais, landing pages e protótipos nunca chega nem perto disso.</p>
+      <aside class="margin-note">Um site institucional típico raramente passa de 3-4 telas e um punhado de interações. A complexidade do build costuma superar a complexidade do próprio site.</aside>
+    </div>
+
+    <p>Quando o projeto é pequeno, a esteira de build vira a parte mais complicada do processo: configurar o bundler, resolver conflitos de versão, esperar o build terminar antes de ver qualquer mudança. Isso rouba tempo do que realmente importa — o design, o conteúdo e os detalhes que o cliente vai perceber.</p>
+
+    <p class="pull-quote">Nem todo projeto pequeno precisa de uma esteira de <span class="grad-text">build</span>. Às vezes ele só precisa <span class="grad-text">funcionar</span>.</p>
+
+    <p>A alternativa que uso hoje em boa parte dos projetos: um único arquivo HTML, Tailwind via CDN e JavaScript puro. Sem <code class="font-mono text-sm text-[var(--str)]">package.json</code>, sem <code class="font-mono text-sm text-[var(--str)]">node_modules</code>, sem passo de build. Abre o arquivo, edita, salva, atualiza a página.</p>
+
+    <!-- CODE EXAMPLE -->
+    <div class="editor my-10 reveal">
+      <div class="flex items-center px-4 pt-3">
+        <div class="flex gap-1.5 mr-4">
+          <span class="w-3 h-3 rounded-full bg-[#ff5f56]"></span>
+          <span class="w-3 h-3 rounded-full bg-[#ffbd2e]"></span>
+          <span class="w-3 h-3 rounded-full bg-[#27c93f]"></span>
+        </div>
+        <div class="editor-tab active px-3 py-2">index.html</div>
+      </div>
+      <div class="p-5 font-mono text-[13px] leading-7 overflow-x-auto">
+        <div class="flex gap-4"><span class="line-no w-5">1</span><span><span style="color:var(--cm)">&lt;!DOCTYPE html&gt;</span></span></div>
+        <div class="flex gap-4"><span class="line-no w-5">2</span><span><span style="color:var(--kw)">&lt;html</span> <span style="color:var(--fn)">lang</span>=<span style="color:var(--str)">"pt-BR"</span><span style="color:var(--kw)">&gt;</span></span></div>
+        <div class="flex gap-4"><span class="line-no w-5">3</span><span>&nbsp;&nbsp;<span style="color:var(--kw)">&lt;head&gt;</span></span></div>
+        <div class="flex gap-4"><span class="line-no w-5">4</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--kw)">&lt;script</span> <span style="color:var(--fn)">src</span>=<span style="color:var(--str)">"https://cdn.tailwindcss.com"</span><span style="color:var(--kw)">&gt;&lt;/script&gt;</span></span></div>
+        <div class="flex gap-4"><span class="line-no w-5">5</span><span>&nbsp;&nbsp;<span style="color:var(--kw)">&lt;/head&gt;</span></span></div>
+        <div class="flex gap-4"><span class="line-no w-5">6</span><span>&nbsp;&nbsp;<span style="color:var(--kw)">&lt;body</span> <span style="color:var(--fn)">class</span>=<span style="color:var(--str)">"bg-slate-900 text-white"</span><span style="color:var(--kw)">&gt;</span></span></div>
+        <div class="flex gap-4"><span class="line-no w-5">7</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--kw)">&lt;h1</span> <span style="color:var(--fn)">class</span>=<span style="color:var(--str)">"text-3xl font-bold"</span><span style="color:var(--kw)">&gt;</span>Hello, sem build!<span style="color:var(--kw)">&lt;/h1&gt;</span></span></div>
+        <div class="flex gap-4"><span class="line-no w-5">8</span><span>&nbsp;&nbsp;<span style="color:var(--kw)">&lt;/body&gt;</span></span></div>
+        <div class="flex gap-4"><span class="line-no w-5">9</span><span><span style="color:var(--kw)">&lt;/html&gt;</span></span></div>
+      </div>
+    </div>
+
+    <p>Isso já roda em qualquer navegador moderno, sem transpileração e sem instalar nada. Para landing pages, mockups de cliente e protótipos, essa simplicidade vale mais do que a otimização que um build traria.</p>
+
+    <h2>Onde isso realmente compensa</h2>
+
+    <div class="lg:grid lg:grid-cols-[1fr_210px] lg:gap-10">
+      <p>Uso essa abordagem principalmente em três cenários: mockups para aprovação de cliente (onde velocidade de iteração importa mais que performance final), sites institucionais pequenos que não vão crescer muito, e componentes de referência — como a biblioteca de UI que mantenho no tema GitHub Dark, pensada justamente para ser copiada e colada sem depender de nenhuma ferramenta.</p>
+      <aside class="margin-note">A CDN do Tailwind carrega mais CSS do que um build otimizado com purge. Para uma landing page isso é irrelevante; para uma aplicação grande, não é.</aside>
+    </div>
+
+    <figure class="my-12 reveal">
+      <svg viewBox="0 0 900 300" class="w-full h-auto rounded-xl border border-[var(--border)]" style="background:var(--surface)">
+        <text x="225" y="34" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13" fill="var(--muted)">com build tools</text>
+        <text x="675" y="34" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13" fill="var(--muted)">sem build tools</text>
+        <line x1="450" y1="10" x2="450" y2="290" stroke="var(--border)" stroke-width="1"/>
+
+        <g font-family="JetBrains Mono, monospace" font-size="13" fill="var(--text)">
+          <text x="90" y="75">📁 src/</text>
+          <text x="110" y="100">📁 components/</text>
+          <text x="130" y="125" fill="var(--muted)">Button.jsx</text>
+          <text x="130" y="147" fill="var(--muted)">Card.jsx</text>
+          <text x="110" y="172">📁 styles/</text>
+          <text x="130" y="197" fill="var(--muted)">tailwind.css</text>
+          <text x="90" y="222">📄 package.json</text>
+          <text x="90" y="247">📄 vite.config.js</text>
+          <text x="90" y="272">📄 node_modules/ …</text>
+        </g>
+
+        <g font-family="JetBrains Mono, monospace" font-size="13" fill="var(--text)">
+          <text x="545" y="120">📄 index.html</text>
+        </g>
+        <rect x="533" y="100" width="140" height="34" rx="8" fill="none" stroke="var(--cyan)" stroke-width="1.5" opacity="0.6"/>
+      </svg>
+      <figcaption>Fig. 1 — a diferença de arquivos entre um setup tradicional e um arquivo único direto no navegador.</figcaption>
+    </figure>
+
+    <h2>Quando isso não funciona</h2>
+
+    <p>Essa abordagem tem limite, e é importante ser honesto sobre isso. Aplicações com estado complexo, várias páginas com roteamento, times grandes trabalhando no mesmo código ou qualquer coisa que precise de TypeScript, tree-shaking real ou testes automatizados — tudo isso ainda pede uma esteira de build de verdade. A ideia não é abandonar ferramentas, é escolher a ferramenta certa para o tamanho do problema.</p>
+
+    <p>No fim, a pergunta que uso pra decidir é simples: <strong>esse projeto vai crescer a ponto de a esteira de build se pagar?</strong> Se a resposta for não, um arquivo HTML bem organizado resolve — e resolve mais rápido.</p>
+
+  </div>
+
+  <!-- AUTHOR -->
+  <div class="flex items-center gap-4 mt-16 pt-10 border-t border-[var(--border)] reveal">
+    <div class="avatar-mono">DB</div>
+    <div>
+      <p class="font-display font-semibold">Daniel Bertucciolli</p>
+      <p class="font-mono text-xs text-[var(--muted)]">Full Stack Developer</p>
+    </div>
+  </div>
+
+  <!-- RELATED -->
+  <div class="mt-12 reveal">
+    <p class="font-mono text-xs text-[var(--muted)] mb-4">continue lendo</p>
+    <div class="flex flex-col gap-3">
+      <a href="portfolio-dev.html#blog" class="blog-row">
+        <span class="font-mono text-sm">📄 modulo-11-boletos-o-que-ninguem-conta.md</span>
+        <span class="blog-arrow font-mono text-lg">→</span>
+      </a>
+      <a href="portfolio-dev.html#blog" class="blog-row">
+        <span class="font-mono text-sm">📄 glassmorphism-sem-exagero.md</span>
+        <span class="blog-arrow font-mono text-lg">→</span>
+      </a>
+    </div>
+  </div>
+</article>
+
+<footer class="relative z-10 border-t border-[#1c222c] py-8">
+  <p class="text-center font-mono text-xs text-[var(--muted)]">© 2026 Daniel Bertucciolli — feito com Tailwind &amp; café.</p>
+</footer>
+
+<script>
+  // reading progress
+  const progressBar = document.getElementById('progress-bar');
+  function updateProgress(){
+    const h = document.documentElement;
+    const scrolled = h.scrollTop || document.body.scrollTop;
+    const height = h.scrollHeight - h.clientHeight;
+    progressBar.style.width = height > 0 ? `${(scrolled / height) * 100}%` : '0%';
+  }
+  document.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+
+  // scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
