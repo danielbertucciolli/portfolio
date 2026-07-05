@@ -175,7 +175,7 @@
   .dropdown-wrap{ position: relative; }
   .dropdown-panel{
     position: absolute;
-    top: calc(100% + 16px);
+    top: calc(100% + 8px);
     left: 50%;
     transform: translateX(-50%) translateY(-6px);
     min-width: 210px;
@@ -235,6 +235,59 @@
   .blog-arrow{ transition: transform .25s ease, color .25s ease; color: var(--muted); }
   .blog-row:hover .blog-arrow{ transform: translateX(4px); color: var(--cyan); }
 
+  /* testimonial carousel */
+  .carousel-track{
+    display: flex;
+    transition: transform .6s cubic-bezier(.65,.05,.36,1);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .carousel-track{ transition: none; }
+  }
+  .carousel-slide{
+    flex: 0 0 100%;
+    min-height: 300px;
+    padding: 56px 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #0d1117;
+  }
+  .quote-mark{
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 64px;
+    line-height: 1;
+    opacity: .3;
+    margin-bottom: 4px;
+  }
+  .testimonial-text{
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.45;
+    max-width: 620px;
+    margin-bottom: 26px;
+  }
+  .avatar-mono{
+    width: 42px; height: 42px;
+    border-radius: 9999px;
+    background: rgba(13,17,23,.16);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 12.5px;
+  }
+  .carousel-dot{
+    width: 8px; height: 8px;
+    border-radius: 9999px;
+    background: var(--border);
+    border: 0; padding: 0; cursor: pointer;
+    transition: background .2s ease, width .2s ease;
+  }
+  .carousel-dot.active{
+    width: 22px;
+    background: linear-gradient(90deg, var(--violet), var(--cyan));
+  }
+
   ::selection{ background: rgba(167,139,250,.35); color: #fff; }
   a:focus-visible, button:focus-visible{ outline: 2px solid var(--cyan); outline-offset: 3px; }
 
@@ -282,6 +335,7 @@
 
       <a href="#experience" class="nav-link">log</a>
       <a href="#blog" class="nav-link">blog</a>
+      <a href="#testimonials" class="nav-link">depoimentos</a>
       <a href="#contact" class="nav-link">contato</a>
     </div>
     <a href="#contact" class="hidden md:inline-block px-4 py-2 rounded-lg btn-grad text-sm">$ contratar</a>
@@ -477,7 +531,7 @@
 
       <div class="flex flex-col gap-4">
 
-        <a href="#" class="blog-row">
+        <a href="blog-post-build-tools.html" class="blog-row">
           <div class="min-w-0">
             <p class="font-mono text-sm text-[var(--text)] mb-1 truncate">📄 por-que-abandonei-build-tools.md</p>
             <p class="text-sm text-[var(--muted)] mb-2">Como projetos pequenos ficam mais rápidos de entregar só com Tailwind CDN e JS puro.</p>
@@ -534,6 +588,75 @@
         </a>
 
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS CAROUSEL -->
+<section id="testimonials" class="relative z-10 max-w-6xl mx-auto px-6 py-20 reveal scroll-mt-24">
+  <div class="grid md:grid-cols-[100px_1fr] gap-8">
+    <p class="font-mono text-sm text-[var(--muted)]">06 / depoimentos</p>
+    <div>
+      <h2 class="font-display text-2xl font-semibold mb-8">o que dizem sobre o trabalho</h2>
+
+      <div id="carousel" class="relative rounded-2xl overflow-hidden border border-[var(--border)]" tabindex="0" aria-roledescription="carousel" aria-label="Depoimentos de clientes">
+        <div id="carousel-track" class="carousel-track">
+
+          <div class="carousel-slide" style="background: linear-gradient(135deg, var(--violet), var(--cyan))">
+            <p class="quote-mark">&ldquo;</p>
+            <p class="testimonial-text">O site ficou muito além do que a gente esperava — rápido, bonito e fácil de manter o conteúdo no dia a dia.</p>
+            <div class="flex items-center gap-3">
+              <span class="avatar-mono">PR</span>
+              <div>
+                <p class="font-mono text-sm font-semibold">Sócio(a)</p>
+                <p class="font-mono text-xs opacity-70">Perez de Rezende Advogados</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="carousel-slide" style="background: linear-gradient(135deg, var(--pink), var(--amber))">
+            <p class="quote-mark">&ldquo;</p>
+            <p class="testimonial-text">Resolveu um problema de validação que vinha nos dando dor de cabeça há meses, sem gambiarra.</p>
+            <div class="flex items-center gap-3">
+              <span class="avatar-mono">VB</span>
+              <div>
+                <p class="font-mono text-sm font-semibold">Parceiro técnico</p>
+                <p class="font-mono text-xs opacity-70">Projeto de validação bancária</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="carousel-slide" style="background: linear-gradient(135deg, var(--cyan), var(--green))">
+            <p class="quote-mark">&ldquo;</p>
+            <p class="testimonial-text">Entendeu o que a loja precisava sem que a gente tivesse que explicar tudo em detalhes.</p>
+            <div class="flex items-center gap-3">
+              <span class="avatar-mono">SI</span>
+              <div>
+                <p class="font-mono text-sm font-semibold">Gerência</p>
+                <p class="font-mono text-xs opacity-70">Station Informática</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="carousel-slide" style="background: linear-gradient(135deg, var(--violet), var(--pink))">
+            <p class="quote-mark">&ldquo;</p>
+            <p class="testimonial-text">Comunicação clara do início ao fim, e o prazo foi cumprido sem surpresas.</p>
+            <div class="flex items-center gap-3">
+              <span class="avatar-mono">CR</span>
+              <div>
+                <p class="font-mono text-sm font-semibold">Cliente recorrente</p>
+                <p class="font-mono text-xs opacity-70">Projeto sob NDA</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <button id="carousel-prev" aria-label="Depoimento anterior" class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/30 backdrop-blur-sm border border-white/15 text-white flex items-center justify-center transition-all hover:bg-black/50 hover:scale-105">‹</button>
+        <button id="carousel-next" aria-label="Próximo depoimento" class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/30 backdrop-blur-sm border border-white/15 text-white flex items-center justify-center transition-all hover:bg-black/50 hover:scale-105">›</button>
+      </div>
+
+      <div id="carousel-dots" class="flex justify-center gap-2 mt-6"></div>
     </div>
   </div>
 </section>
@@ -636,28 +759,45 @@
     });
   });
 
-  // ---- dropdown submenus ----
+  // ---- dropdown submenus (hover + click) ----
   const dropdowns = document.querySelectorAll('[data-dropdown]');
-  function closeAllDropdowns(){
-    dropdowns.forEach(d => {
-      d.classList.remove('open');
-      const trigger = d.querySelector('[data-dropdown-trigger]');
-      if(trigger) trigger.setAttribute('aria-expanded', 'false');
-    });
+  const closeTimers = new Map();
+
+  function closeDropdown(d){
+    d.classList.remove('open');
+    const trigger = d.querySelector('[data-dropdown-trigger]');
+    if(trigger) trigger.setAttribute('aria-expanded', 'false');
   }
+  function closeAllDropdowns(except){
+    dropdowns.forEach(d => { if(d !== except) closeDropdown(d); });
+  }
+  function openDropdown(d){
+    clearTimeout(closeTimers.get(d));
+    closeAllDropdowns(d);
+    d.classList.add('open');
+    const trigger = d.querySelector('[data-dropdown-trigger]');
+    if(trigger) trigger.setAttribute('aria-expanded', 'true');
+  }
+
   dropdowns.forEach(d => {
     const trigger = d.querySelector('[data-dropdown-trigger]');
-    if(!trigger) return;
-    trigger.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isOpen = d.classList.contains('open');
-      closeAllDropdowns();
-      if(!isOpen){
-        d.classList.add('open');
-        trigger.setAttribute('aria-expanded', 'true');
-      }
+
+    d.addEventListener('mouseenter', () => openDropdown(d));
+    d.addEventListener('mouseleave', () => {
+      const t = setTimeout(() => closeDropdown(d), 200);
+      closeTimers.set(d, t);
     });
+
+    if(trigger){
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = d.classList.contains('open');
+        closeAllDropdowns();
+        if(!isOpen) openDropdown(d);
+      });
+    }
   });
+
   document.addEventListener('click', () => closeAllDropdowns());
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeAllDropdowns(); });
   document.querySelectorAll('.dropdown-panel a').forEach(a => {
@@ -703,6 +843,60 @@
 
   const filterClear = document.getElementById('filter-clear');
   if(filterClear) filterClear.addEventListener('click', () => applyFilter('todos'));
+
+  // ---- testimonial carousel ----
+  const carouselEl = document.getElementById('carousel');
+  const track = document.getElementById('carousel-track');
+  const dotsWrap = document.getElementById('carousel-dots');
+  const slides = track ? Array.from(track.children) : [];
+  let current = 0;
+  let autoplayTimer = null;
+
+  function goTo(index){
+    current = (index + slides.length) % slides.length;
+    track.style.transform = `translateX(-${current * 100}%)`;
+    Array.from(dotsWrap.children).forEach((dot, i) => dot.classList.toggle('active', i === current));
+  }
+  function nextSlide(){ goTo(current + 1); }
+  function prevSlide(){ goTo(current - 1); }
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', `Ir para depoimento ${i + 1}`);
+    dot.addEventListener('click', () => { goTo(i); resetAutoplay(); });
+    dotsWrap.appendChild(dot);
+  });
+
+  function startAutoplay(){
+    if(prefersReduced || slides.length < 2) return;
+    autoplayTimer = setInterval(nextSlide, 6000);
+  }
+  function stopAutoplay(){ clearInterval(autoplayTimer); }
+  function resetAutoplay(){ stopAutoplay(); startAutoplay(); }
+
+  const prevBtn = document.getElementById('carousel-prev');
+  const nextBtn = document.getElementById('carousel-next');
+  if(prevBtn) prevBtn.addEventListener('click', () => { prevSlide(); resetAutoplay(); });
+  if(nextBtn) nextBtn.addEventListener('click', () => { nextSlide(); resetAutoplay(); });
+
+  if(carouselEl){
+    carouselEl.addEventListener('mouseenter', stopAutoplay);
+    carouselEl.addEventListener('mouseleave', startAutoplay);
+    carouselEl.addEventListener('keydown', (e) => {
+      if(e.key === 'ArrowRight'){ nextSlide(); resetAutoplay(); }
+      if(e.key === 'ArrowLeft'){ prevSlide(); resetAutoplay(); }
+    });
+
+    let touchStartX = 0;
+    carouselEl.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+    carouselEl.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if(Math.abs(dx) > 40){ dx < 0 ? nextSlide() : prevSlide(); resetAutoplay(); }
+    });
+  }
+
+  startAutoplay();
 </script>
 </body>
 </html>
