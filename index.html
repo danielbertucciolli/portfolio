@@ -157,7 +157,7 @@ body {
 .dots { display: flex; gap: 3px; justify-content: center; }
 .dots i { width: 8px; height: 26px; border-radius: 2px; display: block; box-shadow: inset 0 0 0 1px var(--line); }
 
-@media (min-width: 860px) {
+@media (min-width: 980px) {
   .menu-toggle { display: none; }
   .nav { display: block; flex-basis: auto; max-height: none; overflow: visible; padding: 0; }
   .nav-list { flex-direction: row; align-items: center; gap: 6px; }
@@ -415,6 +415,90 @@ button.chip:hover { border-color: var(--muted); }
 .mini-tl { margin-top: 4px; }
 #t-swatches .swatch i { box-shadow: inset 0 0 0 1px var(--line); }
 
+/* ===== Catálogo: banners de games e filmes ===== */
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.banners { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 20px; align-items: start; }
+.banner { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
+.banner-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.banner h3 { margin: 0; font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: 1.3rem; line-height: 1.02; text-wrap: balance; overflow-wrap: anywhere; }
+.banner .desc { margin: 0; color: var(--muted); font-size: 0.95rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.banner .foot { flex-wrap: wrap; margin-top: 2px; }
+.banner .handle { min-width: 0; }
+.banner-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.admin-row { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 12px; border-top: 1px dashed var(--line); }
+.btn.sm { padding: 9px 14px; font-size: 0.72rem; }
+.btn .dot { background: var(--on-accent); color: var(--accent); }
+.btn.ghost .dot { background: var(--accent); color: var(--on-accent); }
+.btn[aria-disabled="true"] { opacity: 0.6; cursor: not-allowed; }
+.btn.danger { border-color: var(--accent); color: var(--accent); background: transparent; }
+
+.art {
+  position: relative; isolation: isolate; aspect-ratio: 16 / 9; max-width: 100%; overflow: hidden;
+  display: flex; flex-direction: column; justify-content: flex-end; gap: 6px; padding: 16px;
+  background: var(--bg); border-bottom: 1px solid var(--line);
+}
+.art::before, .art::after { content: ""; position: absolute; inset: 0; z-index: -1; }
+.art::after { background: linear-gradient(to top, color-mix(in srgb, var(--bg) 94%, transparent) 0%, transparent 70%); }
+.art.a0::before { background: radial-gradient(circle at 88% 12%, color-mix(in srgb, var(--accent) 60%, transparent), transparent 52%), repeating-linear-gradient(135deg, var(--accent-deep) 0 12px, var(--bg) 12px 26px); }
+.art.a1::before { background: radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--accent) 50%, transparent), transparent 50%), repeating-radial-gradient(circle at 80% 30%, var(--line) 0 2px, transparent 2px 16px), var(--accent-deep); }
+.art.a2::before { background: radial-gradient(circle at 20% 100%, color-mix(in srgb, var(--accent) 55%, transparent), transparent 60%), linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 28px 28px, linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 28px 28px, var(--accent-deep); }
+.art.a3::before { background: radial-gradient(ellipse at 50% -10%, var(--accent) 0%, var(--accent-deep) 40%, var(--bg) 78%); }
+.art.a4::before { background: radial-gradient(circle, color-mix(in srgb, var(--accent) 75%, transparent) 1.6px, transparent 2.2px) 0 0 / 14px 14px, linear-gradient(160deg, var(--accent-deep), var(--bg)); }
+.art.a5::before { background: radial-gradient(circle at 75% 35%, var(--accent) 0 18%, transparent 18.5%), linear-gradient(100deg, var(--accent-deep) 0 58%, var(--bg) 58%); }
+.art-badge {
+  position: absolute; top: 14px; left: 14px; padding: 5px 9px; border-radius: 6px;
+  background: color-mix(in srgb, var(--bg) 72%, transparent); border: 1px solid var(--line); color: var(--fg);
+  font-weight: 800; font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.art-icon {
+  position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border-radius: 50%;
+  display: grid; place-items: center; background: var(--accent); color: var(--on-accent); font-size: 1.05rem; padding-left: 2px;
+}
+.art-meta { font-family: var(--font-mono); font-size: 0.74rem; color: var(--muted); }
+.art-title { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; line-height: 0.98; font-size: clamp(1.3rem, 3.6vw, 1.9rem); text-wrap: balance; overflow-wrap: anywhere; color: var(--fg); }
+.player { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; background: var(--bg); }
+
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin: 24px 0; }
+.toolbar .search { flex: 1 1 240px; }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field label { font-size: 0.74rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); }
+.field input, .field select, .field textarea {
+  width: 100%; min-width: 0; background: var(--surface-in); color: var(--fg); border: 1px solid var(--line);
+  border-radius: 10px; padding: 12px 14px; font: inherit; font-size: 0.95rem;
+}
+.field textarea { resize: vertical; }
+.field input::placeholder, .field textarea::placeholder { color: var(--muted); opacity: 0.7; }
+.form { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 16px; }
+.field.wide { grid-column: 1 / -1; }
+.form-actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.hint { color: var(--muted); font-size: 0.84rem; overflow-wrap: anywhere; }
+.bulk { border: 1px dashed var(--line); border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+.bulk summary { cursor: pointer; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.bulk[open] summary { margin-bottom: 4px; }
+.empty { border: 1px dashed var(--line); border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.empty b { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: 1.2rem; }
+.empty span { color: var(--muted); max-width: 56ch; }
+.note-card { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 14px; align-items: center; }
+
+.modal { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 16px; background: rgba(0, 0, 0, 0.72); backdrop-filter: blur(4px); }
+.modal-card { position: relative; width: 100%; max-width: 820px; max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); overflow-y: auto; padding: 0; display: flex; flex-direction: column; }
+.modal-card .art { border-radius: 0; }
+.modal-body { padding: 22px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.modal-body h2 { margin: 0; font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: clamp(1.5rem, 4.5vw, 2.1rem); line-height: 1; text-wrap: balance; overflow-wrap: anywhere; }
+.modal-body p { margin: 0; color: var(--muted); }
+.modal-x {
+  position: absolute; top: 12px; right: 12px; z-index: 3; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+  border: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 80%, transparent); color: var(--fg); font-size: 1.1rem; line-height: 1;
+}
+.player-box { display: flex; flex-direction: column; max-width: 100%; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: var(--bg); }
+.banner .player-box { border: 0; border-radius: 0; border-bottom: 1px solid var(--line); }
+.player-bar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; padding: 10px 14px; background: var(--surface-in); }
+button.art-icon { border: 0; cursor: pointer; font: inherit; font-size: 1.05rem; }
+button.art-icon:hover { filter: brightness(1.15); }
+.modal-card .art-icon { right: 62px; }
+.modal-card .art-title { display: none; }
+.modal-card .art { min-height: 160px; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .slide, .slide.is-active, .foot-btn .dot { transition: none; }
@@ -438,6 +522,8 @@ button.chip:hover { border-color: var(--muted); }
 
 <div class="progress" id="progress" aria-hidden="true"></div>
 
+<div class="modal" id="modal" hidden><div class="card modal-card" id="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title"></div></div>
+
 <header class="topbar" id="topbar">
   <div class="topbar-in">
     <a class="brand" href="#blog" data-go="blog"><svg aria-hidden="true"><use href="#logo"/></svg><span>@omagodoalgoritmo</span></a>
@@ -455,6 +541,8 @@ button.chip:hover { border-color: var(--muted); }
           </ul>
         </li>
         <li class="nav-item"><button class="nav-btn" type="button" data-go="curriculo">Currículo</button></li>
+        <li class="nav-item"><button class="nav-btn" type="button" data-go="games">Games</button></li>
+        <li class="nav-item"><button class="nav-btn" type="button" data-go="filmes">Filmes</button></li>
         <li class="nav-item has-sub">
           <button class="nav-btn" type="button" data-toggle aria-expanded="false" aria-haspopup="true"><span>Kit</span><svg class="chev" aria-hidden="true"><use href="#chev-d"/></svg></button>
           <ul class="sub">
@@ -1058,7 +1146,128 @@ console.log(nome);</pre>
           </div>
         </article>
 
+        <article class="card kit-item">
+          <header><div><h3>Banner de catálogo</h3><p class="desc">Capa gerada em CSS, selo, título, tags e ação. Serve para filmes, games ou qualquer lista.</p></div></header>
+          <div class="demo">
+            <article class="card banner" style="flex:1 1 300px">
+              <div class="art a3"><span class="art-badge">YouTube</span><span class="art-icon" aria-hidden="true">▶</span><span class="art-meta">2007 · 1h 45min</span><span class="art-title">Título do filme</span></div>
+              <div class="banner-body">
+                <div class="post-top"><span class="tag">Filme</span><span class="pill">2007</span></div>
+                <h3>Título do filme</h3>
+                <p class="desc">Uma ou duas frases que explicam do que se trata e por que vale assistir.</p>
+                <div class="chips"><span class="chip sm">Drama</span><span class="chip sm">Dublado</span></div>
+                <div class="foot"><span class="handle">@seuusuario</span><span class="btn sm"><span>Assistir no YouTube</span><span class="dot"><svg aria-hidden="true"><use href="#arrow-r"/></svg></span></span></div>
+              </div>
+            </article>
+          </div>
+        </article>
+
       </div>
+    </section>
+  </main>
+
+  <!-- ================= VISTA: GAMES ================= -->
+  <main class="view" id="v-games" data-view="games" hidden>
+    <header class="stack">
+      <div class="chips"><span class="pill">GAMES</span><span class="pill ghost" id="g-count">0</span></div>
+      <div class="hblock"><p class="eyebrow">Jogue no navegador</p><h1>Games.</h1></div>
+      <p class="about muted">Jogos online que vamos criar. Cada banner leva ao jogo publicado. Enquanto o link não existe, ele aparece como Em breve.</p>
+    </header>
+
+    <section id="g-hero" aria-label="Destaque"></section>
+
+    <section aria-labelledby="g-cat-t">
+      <div class="hblock"><p class="eyebrow">Catálogo</p><h2 id="g-cat-t">Jogos</h2></div>
+      <div class="toolbar">
+        <div class="field search"><label class="sr" for="g-q">Buscar pelo título</label><input id="g-q" type="search" placeholder="Buscar pelo título" autocomplete="off"></div>
+        <div class="chips" id="g-tags" role="group" aria-label="Filtrar por tag"></div>
+      </div>
+      <div class="banners" id="g-grid"></div>
+      <div class="empty" id="g-empty" hidden></div>
+    </section>
+
+    <section class="card stack" id="g-admin" hidden aria-labelledby="g-adm-t">
+      <div class="hblock"><p class="eyebrow">Só você vê esta área</p><h2 id="g-adm-t">Adicionar jogo</h2></div>
+      <form class="form" id="g-form" novalidate>
+        <div class="field wide"><label for="g-title">Título</label><input id="g-title" type="text" maxlength="120" placeholder="Nome do jogo" autocomplete="off"></div>
+        <div class="field wide"><label for="g-url">Link do jogo</label><input id="g-url" type="url" maxlength="300" placeholder="https://seu-jogo.exemplo.com" autocomplete="off"><span class="hint" id="g-hint" aria-live="polite">Deixe em branco enquanto o jogo não está no ar. O banner mostra "Em breve".</span></div>
+        <div class="field"><label for="g-status">Situação</label><select id="g-status"><option>Em breve</option><option>Beta</option><option>Jogável</option></select></div>
+        <div class="field"><label for="g-genre">Gênero</label><input id="g-genre" type="text" maxlength="30" placeholder="Puzzle" autocomplete="off"></div>
+        <div class="field"><label for="g-players">Jogadores</label><input id="g-players" type="text" maxlength="30" placeholder="1 jogador" autocomplete="off"></div>
+        <div class="field wide"><label for="g-desc">Descrição</label><textarea id="g-desc" rows="3" maxlength="600" placeholder="Uma ou duas frases sobre o jogo."></textarea></div>
+        <div class="field wide"><label for="g-tags-in">Tags, separadas por vírgula</label><input id="g-tags-in" type="text" maxlength="200" placeholder="Puzzle, Navegador, Casual" autocomplete="off"></div>
+        <div class="form-actions">
+          <button class="btn" type="submit" id="g-save">Salvar jogo</button>
+          <button class="btn ghost" type="button" id="g-cancel" hidden>Cancelar edição</button>
+          <span class="hint" id="g-msg" role="status"></span>
+        </div>
+      </form>
+
+      <p class="note">Quando o jogo estiver no ar, edite o banner e cole o link. Ele passa de Em breve para Jogável.</p>
+    </section>
+
+    <section aria-labelledby="g-ex-t">
+      <div class="section-head">
+        <div class="hblock"><p class="eyebrow">Modelos</p><h2 id="g-ex-t">Exemplos de banner</h2></div>
+        <button class="chip" type="button" id="g-ex-toggle" aria-pressed="true">Exemplos visíveis</button>
+      </div>
+      <p class="note" style="margin-top:12px">Banners de modelo, com jogos inventados. Servem para ver como o catálogo fica cheio e podem ser ocultados.</p>
+      <div class="banners" id="g-ex" style="margin-top:24px"></div>
+    </section>
+  </main>
+
+  <!-- ================= VISTA: FILMES ================= -->
+  <main class="view" id="v-filmes" data-view="filmes" hidden>
+    <header class="stack">
+      <div class="chips"><span class="pill">CINEMA</span><span class="pill ghost" id="f-count">0</span></div>
+      <div class="hblock"><p class="eyebrow">Exibição online</p><h1>Filmes.</h1></div>
+      <p class="about muted">Filmes públicos reunidos em um só lugar. Clique no play do banner para assistir sem sair da página.</p>
+    </header>
+
+    <section id="f-hero" aria-label="Destaque"></section>
+
+    <section aria-labelledby="f-cat-t">
+      <div class="hblock"><p class="eyebrow">Catálogo</p><h2 id="f-cat-t">Em cartaz</h2></div>
+      <div class="toolbar">
+        <div class="field search"><label class="sr" for="f-q">Buscar pelo título</label><input id="f-q" type="search" placeholder="Buscar pelo título" autocomplete="off"></div>
+        <div class="chips" id="f-tags" role="group" aria-label="Filtrar por tag"></div>
+      </div>
+      <div class="banners" id="f-grid"></div>
+      <div class="empty" id="f-empty" hidden></div>
+    </section>
+
+    <section class="card stack" id="f-admin" hidden aria-labelledby="f-adm-t">
+      <div class="hblock"><p class="eyebrow">Só você vê esta área</p><h2 id="f-adm-t">Adicionar filme</h2></div>
+      <form class="form" id="f-form" novalidate>
+        <div class="field wide"><label for="f-title">Título</label><input id="f-title" type="text" maxlength="120" placeholder="A Garota Ideal" autocomplete="off"></div>
+        <div class="field wide"><label for="f-url">Link do YouTube</label><input id="f-url" type="url" maxlength="300" placeholder="https://www.youtube.com/watch?v=ThSHzNG7Qa8" autocomplete="off"><span class="hint" id="f-hint" aria-live="polite">Aceita links watch?v=, youtu.be e shorts.</span></div>
+        <div class="field"><label for="f-year">Ano</label><input id="f-year" type="text" maxlength="10" placeholder="2007" autocomplete="off"></div>
+        <div class="field"><label for="f-runtime">Duração</label><input id="f-runtime" type="text" maxlength="20" placeholder="1h 45min" autocomplete="off"></div>
+        <div class="field"><label for="f-channel">Canal</label><input id="f-channel" type="text" maxlength="60" placeholder="Nome do canal" autocomplete="off"></div>
+        <div class="field wide"><label for="f-desc">Descrição</label><textarea id="f-desc" rows="3" maxlength="600" placeholder="Uma ou duas frases sobre o filme."></textarea></div>
+        <div class="field wide"><label for="f-tags-in">Tags, separadas por vírgula</label><input id="f-tags-in" type="text" maxlength="200" placeholder="Filme completo, Dublado, Drama" autocomplete="off"></div>
+        <div class="form-actions">
+          <button class="btn" type="submit" id="f-save">Salvar filme</button>
+          <button class="btn ghost" type="button" id="f-cancel" hidden>Cancelar edição</button>
+          <span class="hint" id="f-msg" role="status"></span>
+        </div>
+      </form>
+      <details class="bulk">
+        <summary>Importar vários de uma vez</summary>
+        <p class="hint">Cole um bloco por filme, com o título e o link logo abaixo. Também vale "Título | link" na mesma linha.</p>
+        <div class="field"><label class="sr" for="f-bulk">Lista de filmes</label><textarea id="f-bulk" rows="6" placeholder="Filme: A Garota Ideal&#10;https://www.youtube.com/watch?v=ThSHzNG7Qa8"></textarea></div>
+        <div class="form-actions"><button class="btn ghost" type="button" id="f-bulk-go">Importar lista</button><span class="hint" id="f-bulk-msg" role="status"></span></div>
+      </details>
+      <p class="note">Adicione apenas filmes que o canal tem direito de exibir, como domínio público ou uploads oficiais. A página só guarda o título, a descrição e o link.</p>
+    </section>
+
+    <section aria-labelledby="f-ex-t">
+      <div class="section-head">
+        <div class="hblock"><p class="eyebrow">Modelos</p><h2 id="f-ex-t">Exemplos de banner</h2></div>
+        <button class="chip" type="button" id="f-ex-toggle" aria-pressed="true">Exemplos visíveis</button>
+      </div>
+      <p class="note" style="margin-top:12px">Banners de modelo, com títulos inventados. Servem para ver como o catálogo fica cheio e podem ser ocultados.</p>
+      <div class="banners" id="f-ex" style="margin-top:24px"></div>
     </section>
   </main>
 
@@ -1200,7 +1409,7 @@ console.log(tema);</pre>
 
 <script>
 (function () {
-  var views = ['blog', 'artigo', 'curriculo', 'kit', 'paletas', 'tema'];
+  var views = ['blog', 'artigo', 'curriculo', 'games', 'filmes', 'kit', 'paletas', 'tema'];
   var THEMES = [
     { id: 'vermelho', name: 'Vermelho Mago', sub: 'Original do blog', light: false,
       desc: 'A paleta base do blog: preto profundo, brilho vinho no canto e um único vermelho de destaque. Tem presença e funciona bem para conteúdo com opinião.',
@@ -1510,6 +1719,623 @@ console.log(tema);</pre>
   /* Vista inicial */
   var h = (location.hash || '').replace('#', '');
   go(h || 'blog', true);
+})();
+</script>
+
+<script>
+(function () {
+  /* O player do YouTube toca dentro da página. Só fica desligado na prévia do Claude, que bloqueia frames de outros sites; no seu portfólio ele liga sozinho. Para forçar, troque por true ou false. */
+  var ALLOW_EMBED = !/claude|anthropic/i.test(location.hostname);
+  var BRAND = '@omagodoalgoritmo';
+
+  var CFG = {
+    film: { p: 'f-', word: 'filme', words: 'filmes', one: '1 filme' },
+    game: { p: 'g-', word: 'jogo', words: 'jogos', one: '1 jogo' }
+  };
+
+  var EXAMPLES = {
+    film: [
+      { title: 'Noite no Cinema Mudo', year: '1927', runtime: '1h 20min', channel: 'Canal Clássicos', tags: ['Clássico', 'Domínio público', 'Drama'], desc: 'Um pianista improvisa a trilha de um filme sem som e descobre que a plateia também faz parte da história.' },
+      { title: 'A Última Linha de Código', year: '2019', runtime: '52 min', channel: 'Canal Dev', tags: ['Documentário', 'Tecnologia'], desc: 'Bastidores de uma equipe pequena que mantém no ar um sistema usado por milhares de pessoas todos os dias.' },
+      { title: 'Cidade Neon', year: '2021', runtime: '1h 34min', channel: 'Canal Ficção', tags: ['Ficção', 'Suspense', 'Dublado'], desc: 'Uma entregadora percorre uma cidade que nunca apaga as luzes e acaba no centro de um segredo antigo.' },
+      { title: 'Memórias do Terminal', year: '2023', runtime: '14 min', channel: 'Canal Curtas', tags: ['Curta', 'Animação'], desc: 'Um curta animado sobre um velho computador que lembra de cada pessoa que já digitou nele.' }
+    ],
+    game: [
+      { title: 'Caça-Runas', status: 'Em breve', genre: 'Puzzle', players: '1 jogador', tags: ['Puzzle', 'Palavras', 'Navegador'], desc: 'Encontre palavras escondidas em uma grade de runas antes que o tempo acabe. Uma rodada leva dois minutos.' },
+      { title: 'Algoritmo Veloz', status: 'Em breve', genre: 'Corrida', players: '1 jogador', tags: ['Arcade', 'Corrida', '2D'], desc: 'Corra por pistas cheias de bugs e desvie de cada um. Quanto mais longe você vai, mais rápido o código roda.' },
+      { title: 'Mago do Código', status: 'Em breve', genre: 'RPG', players: '1 jogador', tags: ['RPG', 'Turnos', 'JavaScript'], desc: 'Combates por turnos em que cada magia é uma função. Aprenda os feitiços e monte o grimório ideal.' },
+      { title: 'Labirinto Binário', status: 'Em breve', genre: 'Lógica', players: '1 jogador', tags: ['Lógica', 'Puzzle'], desc: 'Abra portas combinando chaves com regras E, OU e NÃO. Cada fase ensina uma ideia nova de lógica.' },
+      { title: 'Defesa do Servidor', status: 'Em breve', genre: 'Estratégia', players: '1 jogador', tags: ['Tower defense', 'Estratégia'], desc: 'Posicione firewalls e cache para segurar as ondas de requisições até o servidor sobreviver à noite.' },
+      { title: 'Digite ou Perca', status: 'Em breve', genre: 'Digitação', players: '1 a 4 jogadores', tags: ['Digitação', 'Multijogador'], desc: 'Digite as palavras que caem na tela antes que toquem o chão. No modo multijogador, vence quem erra menos.' }
+    ]
+  };
+
+  var state = { db: null, canEdit: false, loaded: false, items: [], tag: { film: 'todos', game: 'todos' }, q: { film: '', game: '' }, editing: { film: null, game: null }, armed: null };
+
+  function $(id) { return document.getElementById(id); }
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function str(v, max) { return (typeof v === 'string' ? v : '').trim().slice(0, max || 400); }
+  function safeUrl(u) {
+    try {
+      var x = new URL(String(u || '').trim());
+      return (x.protocol === 'https:' || x.protocol === 'http:') ? x.href : '';
+    } catch (e) { return ''; }
+  }
+  function ytId(u) {
+    var m = '';
+    try {
+      var x = new URL(String(u || '').trim());
+      var h = x.hostname.replace(/^www\./, '').replace(/^m\./, '');
+      if (h === 'youtu.be') m = x.pathname.slice(1).split('/')[0];
+      else if (h === 'youtube.com' || h === 'youtube-nocookie.com' || h === 'music.youtube.com') {
+        if (x.pathname === '/watch') m = x.searchParams.get('v') || '';
+        else {
+          var parts = x.pathname.split('/');
+          if (['shorts', 'embed', 'live', 'v'].indexOf(parts[1]) >= 0) m = parts[2] || '';
+        }
+      }
+    } catch (e) { return ''; }
+    return /^[A-Za-z0-9_-]{11}$/.test(m) ? m : '';
+  }
+  function hash(s) { var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; }
+  function slug(s) {
+    return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'jogo';
+  }
+  function splitTags(v) {
+    var out = [];
+    String(v || '').split(',').forEach(function (t) {
+      t = t.trim().slice(0, 24);
+      if (t && out.indexOf(t) < 0) out.push(t);
+    });
+    return out.slice(0, 8);
+  }
+  function arrowDot() {
+    var d = el('span', 'dot');
+    d.innerHTML = '<svg aria-hidden="true"><use href="#arrow-r"/></svg>';
+    return d;
+  }
+
+  /* Normaliza o que vem do banco (dado de terceiros) */
+  function norm(raw, id) {
+    if (!raw || (raw.kind !== 'film' && raw.kind !== 'game')) return null;
+    var it = {
+      id: id, kind: raw.kind, title: str(raw.title, 120), url: str(raw.url, 500), desc: str(raw.desc, 600),
+      tags: Array.isArray(raw.tags) ? raw.tags.map(function (t) { return str(t, 24); }).filter(Boolean).slice(0, 8) : [],
+      year: str(raw.year, 10), runtime: str(raw.runtime, 20), channel: str(raw.channel, 60), vid: str(raw.vid, 20),
+      status: str(raw.status, 20), genre: str(raw.genre, 30), players: str(raw.players, 30),
+      addedAt: Number(raw.addedAt) || 0
+    };
+    return it.title ? it : null;
+  }
+
+  /* Player do YouTube dentro da página */
+  function ytFrame(it, autoplay) {
+    var f = document.createElement('iframe');
+    f.className = 'player';
+    f.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(it.vid) + '?rel=0' + (autoplay ? '&autoplay=1' : '');
+    f.title = it.title;
+    f.loading = 'lazy';
+    f.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen';
+    f.setAttribute('allowfullscreen', '');
+    return f;
+  }
+  function playIn(art, it) {
+    if (!art || !art.parentNode) return;
+    var box = el('div', 'player-box');
+    box.appendChild(ytFrame(it, true));
+    var bar = el('div', 'player-bar');
+    var back = el('button', 'foot-btn');
+    back.type = 'button';
+    back.appendChild(el('span', null, 'Voltar à capa'));
+    back.addEventListener('click', function () { if (box.parentNode) box.parentNode.replaceChild(art, box); });
+    var yt = el('a', 'foot-btn');
+    yt.href = 'https://www.youtube.com/watch?v=' + encodeURIComponent(it.vid);
+    yt.target = '_blank'; yt.rel = 'noopener noreferrer';
+    yt.appendChild(el('span', null, 'Abrir no YouTube'));
+    bar.appendChild(back); bar.appendChild(yt);
+    box.appendChild(bar);
+    art.parentNode.replaceChild(box, art);
+    box.querySelector('iframe').focus();
+  }
+
+  /* Capa gerada em CSS */
+  function makeArt(kind, it, example) {
+    var a = el('div', 'art a' + (hash(it.title || 'x') % 6));
+    a.appendChild(el('span', 'art-badge', example ? 'Exemplo' : (kind === 'film' ? 'YouTube' : 'Navegador')));
+    var ic;
+    if (kind === 'film' && !example && ALLOW_EMBED && it.vid) {
+      ic = el('button', 'art-icon', '▶');
+      ic.type = 'button';
+      ic.setAttribute('aria-label', 'Assistir ' + it.title);
+      ic.addEventListener('click', function () { playIn(a, it); });
+    } else {
+      ic = el('span', 'art-icon', kind === 'film' ? '▶' : '🎮');
+      ic.setAttribute('aria-hidden', 'true');
+    }
+    a.appendChild(ic);
+    var meta = kind === 'film' ? [it.year, it.runtime].filter(Boolean).join(' · ') : [it.genre, it.players].filter(Boolean).join(' · ');
+    if (meta) a.appendChild(el('span', 'art-meta', meta));
+    a.appendChild(el('span', 'art-title', it.title));
+    return a;
+  }
+
+  function actionEl(kind, it, example, artEl) {
+    var url = example ? '' : (kind === 'film' ? (it.vid ? 'https://www.youtube.com/watch?v=' + it.vid : '') : safeUrl(it.url));
+    if (!url) {
+      var off = el('span', 'btn ghost sm', example ? 'Link em breve' : 'Em breve');
+      off.setAttribute('aria-disabled', 'true');
+      return off;
+    }
+    if (kind === 'film' && ALLOW_EMBED && artEl) {
+      var pb = el('button', 'btn sm');
+      pb.type = 'button';
+      pb.appendChild(el('span', null, 'Assistir aqui'));
+      pb.appendChild(arrowDot());
+      pb.addEventListener('click', function () { playIn(artEl, it); });
+      return pb;
+    }
+    var a = el('a', 'btn sm');
+    a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    a.appendChild(el('span', null, kind === 'film' ? (ALLOW_EMBED ? 'Abrir no YouTube' : 'Assistir no YouTube') : 'Jogar'));
+    a.appendChild(arrowDot());
+    return a;
+  }
+
+  function statusPill(it, example) {
+    if (example) return el('span', 'pill ghost', 'EXEMPLO');
+    var s = it.status || 'Em breve';
+    var p = el('span', s === 'Jogável' ? 'pill live' : (s === 'Beta' ? 'pill' : 'pill ghost'), s.toUpperCase());
+    return p;
+  }
+
+  function banner(kind, it, example) {
+    var c = el('article', 'card banner');
+    var art = makeArt(kind, it, example);
+    c.appendChild(art);
+    var b = el('div', 'banner-body');
+    c.appendChild(b);
+
+    var top = el('div', 'post-top');
+    top.appendChild(el('span', 'tag', kind === 'film' ? 'Filme' : (it.genre || 'Jogo')));
+    top.appendChild(kind === 'film' ? el('span', example ? 'pill ghost' : 'pill', example ? 'EXEMPLO' : (it.year || 'FILME')) : statusPill(it, example));
+    b.appendChild(top);
+    b.appendChild(el('h3', null, it.title));
+    if (it.desc) b.appendChild(el('p', 'desc', it.desc));
+    if (it.tags.length) {
+      var tg = el('div', 'chips');
+      it.tags.slice(0, 5).forEach(function (t) { tg.appendChild(el('span', 'chip sm', t)); });
+      b.appendChild(tg);
+    }
+
+    var foot = el('div', 'foot');
+    foot.appendChild(el('span', 'handle', kind === 'film' && it.channel ? it.channel : BRAND));
+    var acts = el('div', 'banner-actions');
+    var det = el('button', 'foot-btn');
+    det.type = 'button';
+    det.appendChild(el('span', null, 'Detalhes'));
+    det.appendChild(arrowDot());
+    det.addEventListener('click', function () { openModal(kind, it, example, det); });
+    acts.appendChild(det);
+    acts.appendChild(actionEl(kind, it, example, art));
+    foot.appendChild(acts);
+    b.appendChild(foot);
+
+    if (state.canEdit && !example) {
+      var row = el('div', 'admin-row');
+      var ed = el('button', 'btn ghost sm', 'Editar');
+      ed.type = 'button';
+      ed.addEventListener('click', function () { startEdit(kind, it); });
+      var rm = el('button', 'btn ghost sm', state.armed === it.id ? 'Confirmar remoção' : 'Remover');
+      rm.type = 'button';
+      if (state.armed === it.id) rm.className = 'btn danger sm';
+      rm.addEventListener('click', function () { removeItem(kind, it, rm); });
+      row.appendChild(ed); row.appendChild(rm);
+      b.appendChild(row);
+    }
+    return c;
+  }
+
+  function hero(kind, it, example) {
+    var box = $(CFG[kind].p + 'hero');
+    box.innerHTML = '';
+    var card = el('div', 'card featured');
+    var left = el('div', 'stack');
+    var chips = el('div', 'chips');
+    chips.appendChild(el('span', 'pill', example ? 'EXEMPLO' : 'DESTAQUE'));
+    var sec = kind === 'film' ? it.year : (it.status || '');
+    if (sec) chips.appendChild(el('span', 'pill ghost', sec));
+    left.appendChild(chips);
+    var hb = el('div', 'hblock');
+    hb.appendChild(el('p', 'eyebrow', kind === 'film' ? 'Filme em destaque' : 'Jogo em destaque'));
+    hb.appendChild(el('h3', null, it.title));
+    left.appendChild(hb);
+    if (it.desc) left.appendChild(el('p', null, it.desc));
+    if (it.tags.length) {
+      var tg = el('div', 'chips');
+      it.tags.slice(0, 5).forEach(function (t) { tg.appendChild(el('span', 'chip sm', t)); });
+      left.appendChild(tg);
+    }
+    var art = makeArt(kind, it, example);
+    var acts = el('div', 'chips');
+    acts.appendChild(actionEl(kind, it, example, art));
+    var det = el('button', 'btn ghost sm', 'Detalhes');
+    det.type = 'button';
+    det.addEventListener('click', function () { openModal(kind, it, example, det); });
+    acts.appendChild(det);
+    left.appendChild(acts);
+    card.appendChild(left);
+    art.style.borderRadius = '16px';
+    art.style.border = '1px solid var(--line)';
+    card.appendChild(art);
+    box.appendChild(card);
+  }
+
+  /* Desenho de cada área */
+  function renderArea(kind) {
+    var c = CFG[kind], p = c.p;
+    var real = state.items.filter(function (i) { return i.kind === kind; });
+
+    $(p + 'count').textContent = state.loaded ? (real.length === 1 ? c.one : real.length + ' ' + c.words) : 'Carregando';
+
+    var freq = {};
+    real.forEach(function (i) { i.tags.forEach(function (t) { freq[t] = (freq[t] || 0) + 1; }); });
+    var tagList = Object.keys(freq).sort(function (a, b) { return freq[b] - freq[a] || a.localeCompare(b); }).slice(0, 12);
+    if (state.tag[kind] !== 'todos' && tagList.indexOf(state.tag[kind]) < 0) state.tag[kind] = 'todos';
+    var chips = $(p + 'tags');
+    chips.innerHTML = '';
+    if (tagList.length) {
+      ['todos'].concat(tagList).forEach(function (t) {
+        var b = el('button', 'chip', t === 'todos' ? 'Todos' : t);
+        b.type = 'button';
+        b.setAttribute('aria-pressed', state.tag[kind] === t ? 'true' : 'false');
+        b.addEventListener('click', function () { state.tag[kind] = t; renderArea(kind); });
+        chips.appendChild(b);
+      });
+    }
+
+    var q = state.q[kind].toLowerCase();
+    var list = real.filter(function (i) {
+      return (state.tag[kind] === 'todos' || i.tags.indexOf(state.tag[kind]) >= 0) && (!q || i.title.toLowerCase().indexOf(q) >= 0);
+    });
+
+    var grid = $(p + 'grid');
+    grid.innerHTML = '';
+    list.forEach(function (i) { grid.appendChild(banner(kind, i, false)); });
+
+    var empty = $(p + 'empty');
+    empty.innerHTML = '';
+    if (!state.loaded) {
+      empty.hidden = false;
+      empty.appendChild(el('b', null, 'Carregando catálogo'));
+      empty.appendChild(el('span', null, 'Os banners salvos aparecem aqui em instantes.'));
+    } else if (!list.length) {
+      empty.hidden = false;
+      if (real.length) {
+        empty.appendChild(el('b', null, 'Nada encontrado'));
+        empty.appendChild(el('span', null, 'Nenhum item combina com a busca ou com a tag escolhida.'));
+      } else {
+        empty.appendChild(el('b', null, kind === 'film' ? 'Nenhum filme ainda' : 'Nenhum jogo ainda'));
+        empty.appendChild(el('span', null, state.canEdit
+          ? (kind === 'film' ? 'Use o formulário abaixo para colar o primeiro link do YouTube.' : 'Use o formulário abaixo para cadastrar o primeiro jogo. Sem link, ele aparece como Em breve.')
+          : 'O catálogo ainda não tem itens publicados. Veja os exemplos de banner mais abaixo.'));
+      }
+    } else {
+      empty.hidden = true;
+    }
+
+    var featured = real.length ? real[0] : null;
+    if (featured) hero(kind, featured, false);
+    else hero(kind, normExample(kind, EXAMPLES[kind][0]), true);
+
+    $(p + 'admin').hidden = !state.canEdit;
+  }
+
+  function normExample(kind, e) {
+    return {
+      id: 'ex', kind: kind, title: e.title, url: '', desc: e.desc || '', tags: e.tags || [], year: e.year || '', runtime: e.runtime || '',
+      channel: e.channel || '', vid: '', status: e.status || '', genre: e.genre || '', players: e.players || '', addedAt: 0
+    };
+  }
+
+  function renderExamples(kind) {
+    var g = $(CFG[kind].p + 'ex');
+    g.innerHTML = '';
+    EXAMPLES[kind].forEach(function (e) { g.appendChild(banner(kind, normExample(kind, e), true)); });
+  }
+
+  function renderAll() { renderArea('film'); renderArea('game'); }
+
+  /* Modal de detalhes */
+  var lastTrigger = null;
+  function row(ico, label, value) {
+    var r = el('div', 'row tight');
+    r.appendChild(el('span', 'ico', ico));
+    var d = document.createElement('div');
+    d.appendChild(el('b', null, label));
+    d.appendChild(el('small', null, value));
+    r.appendChild(d);
+    return r;
+  }
+  function openModal(kind, it, example, trigger) {
+    lastTrigger = trigger || null;
+    var m = $('modal'), card = $('modal-card');
+    card.innerHTML = '';
+    var x = el('button', 'modal-x', '✕');
+    x.type = 'button'; x.setAttribute('aria-label', 'Fechar detalhes');
+    x.addEventListener('click', closeModal);
+    card.appendChild(x);
+
+    if (kind === 'film' && ALLOW_EMBED && it.vid && !example) {
+      card.appendChild(ytFrame(it, false));
+    } else {
+      card.appendChild(makeArt(kind, it, example));
+    }
+
+    var body = el('div', 'modal-body');
+    var tag = el('span', 'tag', kind === 'film' ? 'Filme' : 'Jogo');
+    body.appendChild(tag);
+    var h = el('h2', null, it.title);
+    h.id = 'modal-title';
+    body.appendChild(h);
+    if (it.desc) body.appendChild(el('p', null, it.desc));
+
+    var rows = el('div', 'rows');
+    if (kind === 'film') {
+      if (it.year) rows.appendChild(row('📅', 'Ano', it.year));
+      if (it.runtime) rows.appendChild(row('⏱️', 'Duração', it.runtime));
+      if (it.channel) rows.appendChild(row('📺', 'Canal', it.channel));
+      rows.appendChild(row('🔗', 'Onde assistir', example ? 'Link em breve' : (ALLOW_EMBED ? 'Aqui mesmo, pelo player do YouTube' : 'YouTube, em uma nova aba')));
+    } else {
+      rows.appendChild(row('🚦', 'Situação', example ? 'Exemplo' : (it.status || 'Em breve')));
+      if (it.genre) rows.appendChild(row('🧩', 'Gênero', it.genre));
+      if (it.players) rows.appendChild(row('👥', 'Jogadores', it.players));
+      rows.appendChild(row('🌐', 'Plataforma', 'Navegador'));
+    }
+    if (rows.children.length) body.appendChild(rows);
+
+    if (it.tags.length) {
+      var tg = el('div', 'chips');
+      it.tags.forEach(function (t) { tg.appendChild(el('span', 'chip sm', t)); });
+      body.appendChild(tg);
+    }
+
+    var acts = el('div', 'chips');
+    acts.appendChild(actionEl(kind, it, example));
+    var link = kind === 'film' ? (it.vid ? 'https://www.youtube.com/watch?v=' + it.vid : '') : safeUrl(it.url);
+    if (link && !example) {
+      var cp = el('button', 'btn ghost sm', 'Copiar link');
+      cp.type = 'button';
+      cp.addEventListener('click', function () {
+        function done(ok) { cp.textContent = ok ? 'Link copiado' : 'Copie pelo botão de assistir'; setTimeout(function () { cp.textContent = 'Copiar link'; }, 1800); }
+        try { navigator.clipboard.writeText(link).then(function () { done(true); }, function () { done(false); }); } catch (e) { done(false); }
+      });
+      acts.appendChild(cp);
+    }
+    var cl = el('button', 'btn ghost sm', 'Fechar');
+    cl.type = 'button';
+    cl.addEventListener('click', closeModal);
+    acts.appendChild(cl);
+    body.appendChild(acts);
+    card.appendChild(body);
+
+    m.hidden = false;
+    document.body.style.overflow = 'hidden';
+    x.focus();
+  }
+  function closeModal() {
+    var m = $('modal');
+    if (m.hidden) return;
+    m.hidden = true;
+    $('modal-card').innerHTML = '';
+    document.body.style.overflow = '';
+    if (lastTrigger && document.body.contains(lastTrigger)) lastTrigger.focus();
+  }
+  $('modal').addEventListener('click', function (e) { if (e.target === $('modal')) closeModal(); });
+  document.addEventListener('keydown', function (e) {
+    var m = $('modal');
+    if (m.hidden) return;
+    if (e.key === 'Escape') { closeModal(); return; }
+    if (e.key === 'Tab') {
+      var f = Array.prototype.slice.call(m.querySelectorAll('a[href], button, [tabindex]:not([tabindex="-1"])'));
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  /* Formulários (só quem pode editar) */
+  function msg(kind, text, id) { $(CFG[kind].p + (id || 'msg')).textContent = text; }
+  function errText(e) {
+    var code = e && e.code;
+    if (code === 'quota_exceeded') return 'O limite do catálogo foi atingido. Remova algum item e tente de novo.';
+    if (code === 'invalid_argument') return 'Esta conta não tem permissão para salvar no catálogo.';
+    return 'Não foi possível salvar agora. Tente de novo em instantes.';
+  }
+  function resetForm(kind) {
+    var p = CFG[kind].p;
+    ['title', 'url', 'desc', 'tags-in'].concat(kind === 'film' ? ['year', 'runtime', 'channel'] : ['genre', 'players']).forEach(function (f) { $(p + f).value = ''; });
+    if (kind === 'game') $('g-status').value = 'Em breve';
+    state.editing[kind] = null;
+    $(p + 'save').textContent = 'Salvar ' + CFG[kind].word;
+    $(p + 'cancel').hidden = true;
+    $(p + 'hint').textContent = kind === 'film' ? 'Aceita links watch?v=, youtu.be e shorts.' : 'Deixe em branco enquanto o jogo não está no ar. O banner mostra "Em breve".';
+  }
+  function startEdit(kind, it) {
+    var p = CFG[kind].p;
+    state.editing[kind] = it.id;
+    $(p + 'title').value = it.title;
+    $(p + 'url').value = kind === 'film' ? (it.vid ? 'https://www.youtube.com/watch?v=' + it.vid : '') : it.url;
+    $(p + 'desc').value = it.desc;
+    $(p + 'tags-in').value = it.tags.join(', ');
+    if (kind === 'film') { $('f-year').value = it.year; $('f-runtime').value = it.runtime; $('f-channel').value = it.channel; }
+    else { $('g-status').value = ['Em breve', 'Beta', 'Jogável'].indexOf(it.status) >= 0 ? it.status : 'Em breve'; $('g-genre').value = it.genre; $('g-players').value = it.players; }
+    $(p + 'save').textContent = 'Atualizar ' + CFG[kind].word;
+    $(p + 'cancel').hidden = false;
+    msg(kind, 'Editando "' + it.title + '".');
+    $(p + 'admin').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    $(p + 'title').focus({ preventScroll: true });
+  }
+  function find(id) { for (var i = 0; i < state.items.length; i++) if (state.items[i].id === id) return state.items[i]; return null; }
+
+  function removeItem(kind, it, btn) {
+    if (state.armed !== it.id) {
+      state.armed = it.id;
+      btn.textContent = 'Confirmar remoção';
+      btn.className = 'btn danger sm';
+      setTimeout(function () { if (state.armed === it.id) { state.armed = null; if (document.body.contains(btn)) { btn.textContent = 'Remover'; btn.className = 'btn ghost sm'; } } }, 3500);
+      return;
+    }
+    state.armed = null;
+    state.db.doc('catalog/' + it.id).delete().then(function () {
+      if (state.editing[kind] === it.id) resetForm(kind);
+      msg(kind, '"' + it.title + '" foi removido.');
+    }, function (e) { msg(kind, errText(e)); });
+  }
+
+  function setupForm(kind) {
+    var p = CFG[kind].p;
+    var form = $(p + 'form');
+    $(p + 'q').addEventListener('input', function (e) { state.q[kind] = e.target.value.trim(); renderArea(kind); });
+    $(p + 'cancel').addEventListener('click', function () { resetForm(kind); msg(kind, ''); });
+
+    if (kind === 'film') {
+      $('f-url').addEventListener('input', function () {
+        var v = $('f-url').value.trim();
+        var hint = $('f-hint');
+        if (!v) { hint.textContent = 'Aceita links watch?v=, youtu.be e shorts.'; return; }
+        var id = ytId(v);
+        hint.textContent = id ? '✅ Vídeo reconhecido (' + id + ').' : '⚠️ Não reconheci este link. Cole o endereço de um vídeo do YouTube.';
+      });
+    } else {
+      $('g-url').addEventListener('input', function () {
+        var v = $('g-url').value.trim();
+        $('g-hint').textContent = !v ? 'Deixe em branco enquanto o jogo não está no ar. O banner mostra "Em breve".' : (safeUrl(v) ? '✅ Link válido.' : '⚠️ Use um endereço completo, começando com https://');
+      });
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!state.db) { msg(kind, 'O catálogo não está disponível para salvar agora.'); return; }
+      var title = str($(p + 'title').value, 120);
+      if (!title) { msg(kind, 'Escreva o título.'); $(p + 'title').focus(); return; }
+      var existing = state.editing[kind] ? find(state.editing[kind]) : null;
+      var obj = { kind: kind, title: title, desc: str($(p + 'desc').value, 600), tags: splitTags($(p + 'tags-in').value), addedAt: existing ? existing.addedAt : Date.now() };
+      var id;
+      if (kind === 'film') {
+        var vid = ytId($('f-url').value);
+        if (!vid) { msg(kind, 'Cole um link válido do YouTube.'); $('f-url').focus(); return; }
+        obj.vid = vid; obj.url = 'https://www.youtube.com/watch?v=' + vid;
+        obj.year = str($('f-year').value, 10); obj.runtime = str($('f-runtime').value, 20); obj.channel = str($('f-channel').value, 60);
+        id = state.editing[kind] || ('film-' + vid);
+        if (!existing && find(id)) { existing = find(id); obj.addedAt = existing.addedAt; }
+      } else {
+        var u = $('g-url').value.trim();
+        if (u && !safeUrl(u)) { msg(kind, 'Use um endereço completo, começando com https://'); $('g-url').focus(); return; }
+        obj.url = u ? safeUrl(u) : '';
+        obj.status = $('g-status').value; obj.genre = str($('g-genre').value, 30); obj.players = str($('g-players').value, 30);
+        id = state.editing[kind] || ('game-' + slug(title) + '-' + Date.now().toString(36));
+      }
+      var btn = $(p + 'save');
+      btn.disabled = true;
+      state.db.doc('catalog/' + id).set(obj).then(function () {
+        msg(kind, '"' + title + '" foi salvo.');
+        resetForm(kind);
+        btn.disabled = false;
+      }, function (err) { msg(kind, errText(err)); btn.disabled = false; });
+    });
+  }
+
+  /* Importar lista de filmes */
+  function parseBulk(text) {
+    var out = [], title = '';
+    String(text).split(/\r?\n/).forEach(function (line) {
+      line = line.trim();
+      if (!line) return;
+      var m = /^(?:filme|título|titulo)\s*:\s*(.+)$/i.exec(line);
+      if (m) { title = m[1].trim(); return; }
+      var u = /https?:\/\/\S+/.exec(line);
+      if (u) {
+        var vid = ytId(u[0]);
+        var t = title || line.replace(u[0], '').replace(/^[\s|:–—-]+|[\s|:–—-]+$/g, '').replace(/^(?:filme|título|titulo)\s*:\s*/i, '').trim();
+        if (vid && t) out.push({ title: t.slice(0, 120), vid: vid });
+        title = '';
+        return;
+      }
+      title = line;
+    });
+    return out;
+  }
+  function setupBulk() {
+    $('f-bulk-go').addEventListener('click', function () {
+      if (!state.db) { $('f-bulk-msg').textContent = 'O catálogo não está disponível para salvar agora.'; return; }
+      var list = parseBulk($('f-bulk').value);
+      if (!list.length) { $('f-bulk-msg').textContent = 'Não encontrei nenhum par de título e link do YouTube.'; return; }
+      var btn = $('f-bulk-go');
+      btn.disabled = true;
+      var added = 0, skipped = 0, now = Date.now(), chain = Promise.resolve();
+      list.forEach(function (it, i) {
+        chain = chain.then(function () {
+          var id = 'film-' + it.vid;
+          if (find(id)) { skipped++; return; }
+          return state.db.doc('catalog/' + id).set({ kind: 'film', title: it.title, vid: it.vid, url: 'https://www.youtube.com/watch?v=' + it.vid, desc: '', tags: [], addedAt: now + i }).then(function () { added++; });
+        });
+      });
+      chain.then(function () {
+        $('f-bulk-msg').textContent = added + (added === 1 ? ' filme adicionado' : ' filmes adicionados') + (skipped ? ', ' + skipped + ' já estava no catálogo.' : '.');
+        if (added) $('f-bulk').value = '';
+        btn.disabled = false;
+      }, function (err) { $('f-bulk-msg').textContent = errText(err); btn.disabled = false; });
+    });
+  }
+
+  /* Exemplos: mostrar ou ocultar */
+  function setupExamples(kind) {
+    var p = CFG[kind].p, key = 'grimorio-ex-' + kind;
+    var btn = $(p + 'ex-toggle'), grid = $(p + 'ex');
+    function apply(show) {
+      grid.hidden = !show;
+      btn.setAttribute('aria-pressed', show ? 'true' : 'false');
+      btn.textContent = show ? 'Exemplos visíveis' : 'Exemplos ocultos';
+    }
+    var show = true;
+    try { show = localStorage.getItem(key) !== 'hide'; } catch (e) {}
+    apply(show);
+    btn.addEventListener('click', function () {
+      show = !show;
+      apply(show);
+      try { localStorage.setItem(key, show ? 'show' : 'hide'); } catch (e) {}
+    });
+  }
+
+  /* Ligação com o banco do artifact */
+  ['film', 'game'].forEach(function (k) { renderExamples(k); setupForm(k); setupExamples(k); });
+  setupBulk();
+  renderAll();
+
+  var useFn = window.claude && typeof window.claude.use === 'function' ? window.claude.use.bind(window.claude) : null;
+  if (!useFn) { state.loaded = true; renderAll(); return; }
+  Promise.all([useFn('db'), useFn('user')]).then(function (r) {
+    var db = r[0], user = r[1];
+    state.db = db;
+    if (!db) { state.loaded = true; renderAll(); return; }
+    var canP = user ? user.canEdit().catch(function () { return false; }) : Promise.resolve(false);
+    return canP.then(function (can) {
+      state.canEdit = !!can;
+      db.collection('catalog').orderBy('addedAt', 'desc').limit(500).onSnapshot(function (snap) {
+        var items = [];
+        snap.docs.forEach(function (d) { var n = norm(d.data(), d.id); if (n) items.push(n); });
+        state.items = items;
+        state.loaded = true;
+        renderAll();
+      }, function () { state.loaded = true; renderAll(); });
+    });
+  }, function () { state.loaded = true; renderAll(); });
 })();
 </script>
 
