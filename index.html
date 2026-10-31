@@ -499,6 +499,69 @@ button.art-icon:hover { filter: brightness(1.15); }
 .modal-card .art-title { display: none; }
 .modal-card .art { min-height: 160px; }
 
+/* ===== Links de contato com botões ===== */
+.link-row { grid-template-columns: 32px minmax(0, 1fr) auto; align-items: start; }
+.link-row .ico { margin-top: 2px; }
+.link-row small { overflow-wrap: anywhere; }
+.row-actions { display: flex; gap: 6px; align-self: start; margin: -3px -5px 0 0; }
+.icon-btn {
+  width: 32px; height: 32px; display: inline-grid; place-items: center; padding: 0; cursor: pointer;
+  border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--muted); text-decoration: none;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.icon-btn svg { width: 16px; height: 16px; }
+.icon-btn:hover { color: var(--fg); border-color: var(--muted); }
+.icon-btn.ok { color: var(--on-accent); background: var(--accent); border-color: var(--accent); }
+
+/* ===== Filmes: vitrine estilo streaming ===== */
+.nf { display: flex; flex-direction: column; gap: 44px; min-width: 0; }
+.nf-hero { position: relative; isolation: isolate; overflow: hidden; border-radius: 22px; border: 1px solid var(--line); min-height: clamp(360px, 56vw, 560px); display: flex; align-items: flex-end; background: var(--bg); }
+.nf-art { position: absolute; inset: 0; aspect-ratio: auto; padding: 0; border: 0; z-index: 0; }
+.nf-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; z-index: 1; }
+.nf-prev, .nf-pv { position: absolute; z-index: 2; border: 0; pointer-events: none; opacity: 0; transition: opacity 0.6s ease; background: #000; }
+.nf-prev.on, .nf-pv.on { opacity: 1; }
+.nf-scrim { position: absolute; inset: 0; z-index: 3; background: linear-gradient(90deg, color-mix(in srgb, var(--bg) 94%, transparent) 0%, color-mix(in srgb, var(--bg) 60%, transparent) 42%, transparent 78%), linear-gradient(to top, var(--bg) 0%, transparent 42%); }
+.nf-hero-body { position: relative; z-index: 4; padding: clamp(20px, 4vw, 44px); display: flex; flex-direction: column; gap: 16px; max-width: min(100%, 640px); }
+.nf-title { margin: 0; font-family: var(--font-display); font-weight: 900; text-transform: uppercase; line-height: 0.95; letter-spacing: -0.01em; font-size: clamp(2rem, 6vw, 3.7rem); text-wrap: balance; overflow-wrap: anywhere; }
+.nf-syn { margin: 0; font-size: 1.05rem; line-height: 1.55; max-width: 52ch; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.nf-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); }
+.nf-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn.lg { padding: 14px 24px; font-size: 0.86rem; }
+.nf-tri { font-size: 0.9em; }
+
+.nf-row { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.nf-rail-wrap { position: relative; min-width: 0; }
+.nf-rail { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x proximity; padding: 10px 4px 14px; scrollbar-width: none; }
+.nf-rail::-webkit-scrollbar { display: none; }
+.nf-card {
+  position: relative; isolation: isolate; flex: 0 0 clamp(220px, 26vw, 300px); aspect-ratio: 16 / 9; scroll-snap-align: start;
+  border-radius: 12px; overflow: hidden; border: 1px solid var(--line); background: var(--bg);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.nf-card:hover, .nf-card:has(.nf-hit:focus-visible) { transform: scale(1.04); border-color: var(--accent); box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45); z-index: 2; }
+.nf-cap { position: absolute; left: 0; right: 0; bottom: 0; z-index: 4; padding: 30px 12px 10px; background: linear-gradient(to top, rgba(0, 0, 0, 0.88), transparent); color: #fff; display: flex; flex-direction: column; gap: 2px; pointer-events: none; }
+.nf-cap b { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: 1rem; line-height: 1.02; overflow-wrap: anywhere; }
+.nf-cap small { font-family: var(--font-mono); font-size: 0.7rem; color: rgba(255, 255, 255, 0.72); }
+.nf-play { position: absolute; z-index: 4; top: 50%; left: 50%; translate: -50% -50%; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--on-accent); font-size: 1rem; padding-left: 3px; opacity: 0; transition: opacity 0.2s ease; pointer-events: none; }
+.nf-card:hover .nf-play, .nf-card:has(.nf-hit:focus-visible) .nf-play { opacity: 1; }
+.nf-hit { position: absolute; inset: 0; z-index: 5; width: 100%; height: 100%; border: 0; padding: 0; background: transparent; cursor: pointer; border-radius: 12px; }
+.nf-arrow {
+  position: absolute; top: 50%; translate: 0 -50%; z-index: 6; width: 38px; height: 38px; border-radius: 50%; border: 0; padding: 0; cursor: pointer;
+  background: var(--arrow-bg); color: var(--arrow-fg); display: none; place-items: center;
+}
+.nf-arrow svg { width: 16px; height: 16px; }
+.nf-arrow.prev { left: 6px; }
+.nf-arrow.next { right: 6px; }
+@media (hover: hover) { .nf-rail-wrap.can-scroll:hover .nf-arrow { display: grid; } .nf-rail-wrap .nf-arrow[disabled] { display: none !important; } }
+
+.nf-modal { position: fixed; inset: 0; z-index: 50; padding: 16px; background: rgba(0, 0, 0, 0.82); backdrop-filter: blur(4px); display: grid; place-items: center; overflow-y: auto; }
+.nf-watch { position: relative; width: 100%; max-width: 980px; max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); overflow-y: auto; padding: 0; display: flex; flex-direction: column; }
+.nf-player { aspect-ratio: 16 / 9; background: #000; width: 100%; max-width: 100%; position: relative; }
+.nf-player .player { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; }
+.nf-watch .modal-x { top: 10px; right: 10px; z-index: 8; }
+.nf-more { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 12px; }
+.nf-more .nf-card { flex: none; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .slide, .slide.is-active, .foot-btn .dot { transition: none; }
@@ -515,6 +578,9 @@ button.art-icon:hover { filter: brightness(1.15); }
     </symbol>
     <symbol id="arrow-r" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="chev-l" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 13l4 4 10-10" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="chev-d" viewBox="0 0 24 24"><path d="M5 9l7 7 7-7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="chev-r" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   </defs>
@@ -523,6 +589,8 @@ button.art-icon:hover { filter: brightness(1.15); }
 <div class="progress" id="progress" aria-hidden="true"></div>
 
 <div class="modal" id="modal" hidden><div class="card modal-card" id="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title"></div></div>
+
+<div class="nf-modal" id="nf-modal" hidden><div class="card nf-watch" id="nf-watch" role="dialog" aria-modal="true" aria-labelledby="nf-title"></div></div>
 
 <header class="topbar" id="topbar">
   <div class="topbar-in">
@@ -848,9 +916,9 @@ button.art-icon:hover { filter: brightness(1.15); }
           <span class="pill live" style="align-self:flex-start">Disponível para projetos</span>
           <div class="rows">
             <div class="row tight"><span class="ico">📍</span><div><b>Localização</b><small>São Bernardo · remoto</small></div></div>
-            <div class="row tight"><span class="ico">✉️</span><div><b>Gmail</b><small><a href="mailto:daniel.bertucciolli.villela99@gmail.com" target="_blank">daniel.bertucciolli.villela99</a></small></div></div>
-            <div class="row tight"><span class="ico">🌐</span><div><b>Instagram</b><small><a href="https://www.instagram.com/daniel.bertucciolli.dev" target="_blank">daniel.bertucciolli.dev</a></small></div></div>
-            <div class="row tight"><span class="ico">🐙</span><div><b>GitHub</b><small><a href="https://github.com/danielbertucciolli" target="_blank">danielbertucciolli</a></small></div></div>
+            <div class="row tight link-row"><span class="ico">✉️</span><div><b>Gmail</b><small>daniel.bertucciolli.villela99</small></div><div class="row-actions"><button class="icon-btn" type="button" data-copy-value="daniel.bertucciolli.villela99@gmail.com" aria-label="Copiar e-mail" title="Copiar e-mail"><svg aria-hidden="true"><use href="#i-copy"/></svg></button><a class="icon-btn" href="mailto:daniel.bertucciolli.villela99@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Enviar e-mail" title="Enviar e-mail"><svg aria-hidden="true"><use href="#i-ext"/></svg></a></div></div>
+            <div class="row tight link-row"><span class="ico">🌐</span><div><b>Instagram</b><small>@daniel.bertucciolli.dev</small></div><div class="row-actions"><button class="icon-btn" type="button" data-copy-value="@daniel.bertucciolli.dev" aria-label="Copiar @ do Instagram" title="Copiar @ do Instagram"><svg aria-hidden="true"><use href="#i-copy"/></svg></button><a class="icon-btn" href="https://www.instagram.com/daniel.bertucciolli.dev" target="_blank" rel="noopener noreferrer" aria-label="Abrir Instagram em outra guia" title="Abrir Instagram em outra guia"><svg aria-hidden="true"><use href="#i-ext"/></svg></a></div></div>
+            <div class="row tight link-row"><span class="ico">🐙</span><div><b>GitHub</b><small>danielbertucciolli</small></div><div class="row-actions"><button class="icon-btn" type="button" data-copy-value="https://github.com/danielbertucciolli" aria-label="Copiar link do GitHub" title="Copiar link do GitHub"><svg aria-hidden="true"><use href="#i-copy"/></svg></button><a class="icon-btn" href="https://github.com/danielbertucciolli" target="_blank" rel="noopener noreferrer" aria-label="Abrir GitHub em outra guia" title="Abrir GitHub em outra guia"><svg aria-hidden="true"><use href="#i-ext"/></svg></a></div></div>
           </div>
           <div class="foot" style="flex-direction:column;align-items:stretch">
             <a class="btn" href="#cv-contato"><span>Falar comigo</span><span class="dot" style="background:var(--fg);color:var(--bg)"><svg aria-hidden="true"><use href="#arrow-r"/></svg></span></a>
@@ -1134,7 +1202,9 @@ console.log(nome);</pre>
           <div class="demo">
             <div class="stack" style="flex:1 1 300px;gap:16px">
               <div class="id-head"><svg aria-hidden="true"><use href="#logo"/></svg><div><h1>Seu Nome</h1><p>Seu cargo</p></div></div>
-              <div class="rows"><div class="row tight"><span class="ico">✉️</span><div><b>E-mail</b><small>daniel.bertucciolli.villela99@gmail.com</small></div></div></div>
+              <div class="rows">
+            <div class="row tight link-row"><span class="ico">✉️</span><div><b>E-mail</b><small>seu@email.com</small></div><div class="row-actions"><button class="icon-btn" type="button" data-copy-value="seu@email.com" aria-label="Copiar e-mail" title="Copiar e-mail"><svg aria-hidden="true"><use href="#i-copy"/></svg></button><a class="icon-btn" href="mailto:seu@email.com" target="_blank" rel="noopener noreferrer" aria-label="Enviar e-mail" title="Enviar e-mail"><svg aria-hidden="true"><use href="#i-ext"/></svg></a></div></div>
+              </div>
             </div>
           </div>
         </article>
@@ -1156,7 +1226,7 @@ console.log(nome);</pre>
                 <h3>Título do filme</h3>
                 <p class="desc">Uma ou duas frases que explicam do que se trata e por que vale assistir.</p>
                 <div class="chips"><span class="chip sm">Drama</span><span class="chip sm">Dublado</span></div>
-                <div class="foot"><span class="handle">@seuusuario</span><span class="btn sm"><span>Assistir no YouTube</span><span class="dot"><svg aria-hidden="true"><use href="#arrow-r"/></svg></span></span></div>
+                <div class="foot"><span class="handle">@seuusuario</span><span class="btn sm"><span>Assistir</span><span class="dot"><svg aria-hidden="true"><use href="#arrow-r"/></svg></span></span></div>
               </div>
             </article>
           </div>
@@ -1218,57 +1288,8 @@ console.log(nome);</pre>
 
   <!-- ================= VISTA: FILMES ================= -->
   <main class="view" id="v-filmes" data-view="filmes" hidden>
-    <header class="stack">
-      <div class="chips"><span class="pill">CINEMA</span><span class="pill ghost" id="f-count">0</span></div>
-      <div class="hblock"><p class="eyebrow">Exibição online</p><h1>Filmes.</h1></div>
-      <p class="about muted">Filmes públicos reunidos em um só lugar. Clique no play do banner para assistir sem sair da página.</p>
-    </header>
-
-    <section id="f-hero" aria-label="Destaque"></section>
-
-    <section aria-labelledby="f-cat-t">
-      <div class="hblock"><p class="eyebrow">Catálogo</p><h2 id="f-cat-t">Em cartaz</h2></div>
-      <div class="toolbar">
-        <div class="field search"><label class="sr" for="f-q">Buscar pelo título</label><input id="f-q" type="search" placeholder="Buscar pelo título" autocomplete="off"></div>
-        <div class="chips" id="f-tags" role="group" aria-label="Filtrar por tag"></div>
-      </div>
-      <div class="banners" id="f-grid"></div>
-      <div class="empty" id="f-empty" hidden></div>
-    </section>
-
-    <section class="card stack" id="f-admin" hidden aria-labelledby="f-adm-t">
-      <div class="hblock"><p class="eyebrow">Só você vê esta área</p><h2 id="f-adm-t">Adicionar filme</h2></div>
-      <form class="form" id="f-form" novalidate>
-        <div class="field wide"><label for="f-title">Título</label><input id="f-title" type="text" maxlength="120" placeholder="A Garota Ideal" autocomplete="off"></div>
-        <div class="field wide"><label for="f-url">Link do YouTube</label><input id="f-url" type="url" maxlength="300" placeholder="https://www.youtube.com/watch?v=ThSHzNG7Qa8" autocomplete="off"><span class="hint" id="f-hint" aria-live="polite">Aceita links watch?v=, youtu.be e shorts.</span></div>
-        <div class="field"><label for="f-year">Ano</label><input id="f-year" type="text" maxlength="10" placeholder="2007" autocomplete="off"></div>
-        <div class="field"><label for="f-runtime">Duração</label><input id="f-runtime" type="text" maxlength="20" placeholder="1h 45min" autocomplete="off"></div>
-        <div class="field"><label for="f-channel">Canal</label><input id="f-channel" type="text" maxlength="60" placeholder="Nome do canal" autocomplete="off"></div>
-        <div class="field wide"><label for="f-desc">Descrição</label><textarea id="f-desc" rows="3" maxlength="600" placeholder="Uma ou duas frases sobre o filme."></textarea></div>
-        <div class="field wide"><label for="f-tags-in">Tags, separadas por vírgula</label><input id="f-tags-in" type="text" maxlength="200" placeholder="Filme completo, Dublado, Drama" autocomplete="off"></div>
-        <div class="form-actions">
-          <button class="btn" type="submit" id="f-save">Salvar filme</button>
-          <button class="btn ghost" type="button" id="f-cancel" hidden>Cancelar edição</button>
-          <span class="hint" id="f-msg" role="status"></span>
-        </div>
-      </form>
-      <details class="bulk">
-        <summary>Importar vários de uma vez</summary>
-        <p class="hint">Cole um bloco por filme, com o título e o link logo abaixo. Também vale "Título | link" na mesma linha.</p>
-        <div class="field"><label class="sr" for="f-bulk">Lista de filmes</label><textarea id="f-bulk" rows="6" placeholder="Filme: A Garota Ideal&#10;https://www.youtube.com/watch?v=ThSHzNG7Qa8"></textarea></div>
-        <div class="form-actions"><button class="btn ghost" type="button" id="f-bulk-go">Importar lista</button><span class="hint" id="f-bulk-msg" role="status"></span></div>
-      </details>
-      <p class="note">Adicione apenas filmes que o canal tem direito de exibir, como domínio público ou uploads oficiais. A página só guarda o título, a descrição e o link.</p>
-    </section>
-
-    <section aria-labelledby="f-ex-t">
-      <div class="section-head">
-        <div class="hblock"><p class="eyebrow">Modelos</p><h2 id="f-ex-t">Exemplos de banner</h2></div>
-        <button class="chip" type="button" id="f-ex-toggle" aria-pressed="true">Exemplos visíveis</button>
-      </div>
-      <p class="note" style="margin-top:12px">Banners de modelo, com títulos inventados. Servem para ver como o catálogo fica cheio e podem ser ocultados.</p>
-      <div class="banners" id="f-ex" style="margin-top:24px"></div>
-    </section>
+    <h1 class="sr">Filmes</h1>
+    <div class="nf" id="nf-root"></div>
   </main>
 
   <!-- ================= VISTA: PALETAS ================= -->
@@ -1724,22 +1745,13 @@ console.log(tema);</pre>
 
 <script>
 (function () {
-  /* O player do YouTube toca dentro da página. Só fica desligado na prévia do Claude, que bloqueia frames de outros sites; no seu portfólio ele liga sozinho. Para forçar, troque por true ou false. */
-  var ALLOW_EMBED = !/claude|anthropic/i.test(location.hostname);
   var BRAND = '@daniel.bertucciolli.dev';
 
   var CFG = {
-    film: { p: 'f-', word: 'filme', words: 'filmes', one: '1 filme' },
     game: { p: 'g-', word: 'jogo', words: 'jogos', one: '1 jogo' }
   };
 
   var EXAMPLES = {
-    film: [
-      { title: 'Noite no Cinema Mudo', year: '1927', runtime: '1h 20min', channel: 'Canal Clássicos', tags: ['Clássico', 'Domínio público', 'Drama'], desc: 'Um pianista improvisa a trilha de um filme sem som e descobre que a plateia também faz parte da história.' },
-      { title: 'A Última Linha de Código', year: '2019', runtime: '52 min', channel: 'Canal Dev', tags: ['Documentário', 'Tecnologia'], desc: 'Bastidores de uma equipe pequena que mantém no ar um sistema usado por milhares de pessoas todos os dias.' },
-      { title: 'Cidade Neon', year: '2021', runtime: '1h 34min', channel: 'Canal Ficção', tags: ['Ficção', 'Suspense', 'Dublado'], desc: 'Uma entregadora percorre uma cidade que nunca apaga as luzes e acaba no centro de um segredo antigo.' },
-      { title: 'Memórias do Terminal', year: '2023', runtime: '14 min', channel: 'Canal Curtas', tags: ['Curta', 'Animação'], desc: 'Um curta animado sobre um velho computador que lembra de cada pessoa que já digitou nele.' }
-    ],
     game: [
       { title: 'Caça-Runas', status: 'Em breve', genre: 'Puzzle', players: '1 jogador', tags: ['Puzzle', 'Palavras', 'Navegador'], desc: 'Encontre palavras escondidas em uma grade de runas antes que o tempo acabe. Uma rodada leva dois minutos.' },
       { title: 'Algoritmo Veloz', status: 'Em breve', genre: 'Corrida', players: '1 jogador', tags: ['Arcade', 'Corrida', '2D'], desc: 'Corra por pistas cheias de bugs e desvie de cada um. Quanto mais longe você vai, mais rápido o código roda.' },
@@ -1813,50 +1825,12 @@ console.log(tema);</pre>
     return it.title ? it : null;
   }
 
-  /* Player do YouTube dentro da página */
-  function ytFrame(it, autoplay) {
-    var f = document.createElement('iframe');
-    f.className = 'player';
-    f.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(it.vid) + '?rel=0' + (autoplay ? '&autoplay=1' : '');
-    f.title = it.title;
-    f.loading = 'lazy';
-    f.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen';
-    f.setAttribute('allowfullscreen', '');
-    return f;
-  }
-  function playIn(art, it) {
-    if (!art || !art.parentNode) return;
-    var box = el('div', 'player-box');
-    box.appendChild(ytFrame(it, true));
-    var bar = el('div', 'player-bar');
-    var back = el('button', 'foot-btn');
-    back.type = 'button';
-    back.appendChild(el('span', null, 'Voltar à capa'));
-    back.addEventListener('click', function () { if (box.parentNode) box.parentNode.replaceChild(art, box); });
-    var yt = el('a', 'foot-btn');
-    yt.href = 'https://www.youtube.com/watch?v=' + encodeURIComponent(it.vid);
-    yt.target = '_blank'; yt.rel = 'noopener noreferrer';
-    yt.appendChild(el('span', null, 'Abrir no YouTube'));
-    bar.appendChild(back); bar.appendChild(yt);
-    box.appendChild(bar);
-    art.parentNode.replaceChild(box, art);
-    box.querySelector('iframe').focus();
-  }
-
   /* Capa gerada em CSS */
   function makeArt(kind, it, example) {
     var a = el('div', 'art a' + (hash(it.title || 'x') % 6));
-    a.appendChild(el('span', 'art-badge', example ? 'Exemplo' : (kind === 'film' ? 'YouTube' : 'Navegador')));
-    var ic;
-    if (kind === 'film' && !example && ALLOW_EMBED && it.vid) {
-      ic = el('button', 'art-icon', '▶');
-      ic.type = 'button';
-      ic.setAttribute('aria-label', 'Assistir ' + it.title);
-      ic.addEventListener('click', function () { playIn(a, it); });
-    } else {
-      ic = el('span', 'art-icon', kind === 'film' ? '▶' : '🎮');
-      ic.setAttribute('aria-hidden', 'true');
-    }
+    a.appendChild(el('span', 'art-badge', example ? 'Exemplo' : 'Navegador'));
+    var ic = el('span', 'art-icon', '🎮');
+    ic.setAttribute('aria-hidden', 'true');
     a.appendChild(ic);
     var meta = kind === 'film' ? [it.year, it.runtime].filter(Boolean).join(' · ') : [it.genre, it.players].filter(Boolean).join(' · ');
     if (meta) a.appendChild(el('span', 'art-meta', meta));
@@ -1871,17 +1845,9 @@ console.log(tema);</pre>
       off.setAttribute('aria-disabled', 'true');
       return off;
     }
-    if (kind === 'film' && ALLOW_EMBED && artEl) {
-      var pb = el('button', 'btn sm');
-      pb.type = 'button';
-      pb.appendChild(el('span', null, 'Assistir aqui'));
-      pb.appendChild(arrowDot());
-      pb.addEventListener('click', function () { playIn(artEl, it); });
-      return pb;
-    }
     var a = el('a', 'btn sm');
     a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer';
-    a.appendChild(el('span', null, kind === 'film' ? (ALLOW_EMBED ? 'Abrir no YouTube' : 'Assistir no YouTube') : 'Jogar'));
+    a.appendChild(el('span', null, 'Jogar'));
     a.appendChild(arrowDot());
     return a;
   }
@@ -2048,7 +2014,7 @@ console.log(tema);</pre>
     EXAMPLES[kind].forEach(function (e) { g.appendChild(banner(kind, normExample(kind, e), true)); });
   }
 
-  function renderAll() { renderArea('film'); renderArea('game'); }
+  function renderAll() { renderArea('game'); }
 
   /* Modal de detalhes */
   var lastTrigger = null;
@@ -2070,11 +2036,7 @@ console.log(tema);</pre>
     x.addEventListener('click', closeModal);
     card.appendChild(x);
 
-    if (kind === 'film' && ALLOW_EMBED && it.vid && !example) {
-      card.appendChild(ytFrame(it, false));
-    } else {
-      card.appendChild(makeArt(kind, it, example));
-    }
+    card.appendChild(makeArt(kind, it, example));
 
     var body = el('div', 'modal-body');
     var tag = el('span', 'tag', kind === 'film' ? 'Filme' : 'Jogo');
@@ -2085,12 +2047,7 @@ console.log(tema);</pre>
     if (it.desc) body.appendChild(el('p', null, it.desc));
 
     var rows = el('div', 'rows');
-    if (kind === 'film') {
-      if (it.year) rows.appendChild(row('📅', 'Ano', it.year));
-      if (it.runtime) rows.appendChild(row('⏱️', 'Duração', it.runtime));
-      if (it.channel) rows.appendChild(row('📺', 'Canal', it.channel));
-      rows.appendChild(row('🔗', 'Onde assistir', example ? 'Link em breve' : (ALLOW_EMBED ? 'Aqui mesmo, pelo player do YouTube' : 'YouTube, em uma nova aba')));
-    } else {
+    {
       rows.appendChild(row('🚦', 'Situação', example ? 'Exemplo' : (it.status || 'Em breve')));
       if (it.genre) rows.appendChild(row('🧩', 'Gênero', it.genre));
       if (it.players) rows.appendChild(row('👥', 'Jogadores', it.players));
@@ -2251,49 +2208,6 @@ console.log(tema);</pre>
     });
   }
 
-  /* Importar lista de filmes */
-  function parseBulk(text) {
-    var out = [], title = '';
-    String(text).split(/\r?\n/).forEach(function (line) {
-      line = line.trim();
-      if (!line) return;
-      var m = /^(?:filme|título|titulo)\s*:\s*(.+)$/i.exec(line);
-      if (m) { title = m[1].trim(); return; }
-      var u = /https?:\/\/\S+/.exec(line);
-      if (u) {
-        var vid = ytId(u[0]);
-        var t = title || line.replace(u[0], '').replace(/^[\s|:–—-]+|[\s|:–—-]+$/g, '').replace(/^(?:filme|título|titulo)\s*:\s*/i, '').trim();
-        if (vid && t) out.push({ title: t.slice(0, 120), vid: vid });
-        title = '';
-        return;
-      }
-      title = line;
-    });
-    return out;
-  }
-  function setupBulk() {
-    $('f-bulk-go').addEventListener('click', function () {
-      if (!state.db) { $('f-bulk-msg').textContent = 'O catálogo não está disponível para salvar agora.'; return; }
-      var list = parseBulk($('f-bulk').value);
-      if (!list.length) { $('f-bulk-msg').textContent = 'Não encontrei nenhum par de título e link do YouTube.'; return; }
-      var btn = $('f-bulk-go');
-      btn.disabled = true;
-      var added = 0, skipped = 0, now = Date.now(), chain = Promise.resolve();
-      list.forEach(function (it, i) {
-        chain = chain.then(function () {
-          var id = 'film-' + it.vid;
-          if (find(id)) { skipped++; return; }
-          return state.db.doc('catalog/' + id).set({ kind: 'film', title: it.title, vid: it.vid, url: 'https://www.youtube.com/watch?v=' + it.vid, desc: '', tags: [], addedAt: now + i }).then(function () { added++; });
-        });
-      });
-      chain.then(function () {
-        $('f-bulk-msg').textContent = added + (added === 1 ? ' filme adicionado' : ' filmes adicionados') + (skipped ? ', ' + skipped + ' já estava no catálogo.' : '.');
-        if (added) $('f-bulk').value = '';
-        btn.disabled = false;
-      }, function (err) { $('f-bulk-msg').textContent = errText(err); btn.disabled = false; });
-    });
-  }
-
   /* Exemplos: mostrar ou ocultar */
   function setupExamples(kind) {
     var p = CFG[kind].p, key = 'grimorio-ex-' + kind;
@@ -2314,8 +2228,7 @@ console.log(tema);</pre>
   }
 
   /* Ligação com o banco do artifact */
-  ['film', 'game'].forEach(function (k) { renderExamples(k); setupForm(k); setupExamples(k); });
-  setupBulk();
+  ['game'].forEach(function (k) { renderExamples(k); setupForm(k); setupExamples(k); });
   renderAll();
 
   var useFn = window.claude && typeof window.claude.use === 'function' ? window.claude.use.bind(window.claude) : null;
@@ -2336,6 +2249,383 @@ console.log(tema);</pre>
       }, function () { state.loaded = true; renderAll(); });
     });
   }, function () { state.loaded = true; renderAll(); });
+})();
+</script>
+
+<script>
+/* ============================================================
+   FILMES · vitrine estilo streaming
+   Para adicionar um filme, copie um bloco da lista FILMES e troque os dados.
+     id            código do vídeo (ThSHzNG7Qa8) ou o link completo do YouTube
+     title         título
+     synopsis      sinopse curta
+     year          ano (opcional)
+     duration      duração, como "1h 45min" (opcional)
+     row           nome da fileira em que o filme aparece
+     tags          lista de tags (opcional)
+     previewStart  segundo em que a prévia começa (opcional)
+     thumb         endereço de uma capa própria (opcional; sem ele usa a capa do YouTube)
+     featured      true coloca o filme no destaque do topo (opcional)
+   ============================================================ */
+(function () {
+  var FILMES = [
+    { id: 'ThSHzNG7Qa8', title: 'A Garota Ideal', year: '2007', duration: '', row: 'Filmes completos', tags: ['Dublado', 'Filme completo'], synopsis: 'Versão dublada em português.', featured: true }
+  ];
+
+  var PREVIEW_HERO = true;        // prévia muda no destaque do topo
+  var PREVIEW_HERO_DELAY = 1500;  // espera antes de começar (ms)
+  var PREVIEW_HOVER = true;       // prévia ao passar o mouse nos cards
+  var PREVIEW_DELAY = 700;        // espera antes de começar (ms)
+
+  function $(id) { return document.getElementById(id); }
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function hash(s) { var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; }
+  function ytId(u) {
+    var m = '';
+    try {
+      var x = new URL(String(u || '').trim());
+      var h = x.hostname.replace(/^www\./, '').replace(/^m\./, '');
+      if (h === 'youtu.be') m = x.pathname.slice(1).split('/')[0];
+      else if (h === 'youtube.com' || h === 'youtube-nocookie.com') {
+        if (x.pathname === '/watch') m = x.searchParams.get('v') || '';
+        else { var p = x.pathname.split('/'); if (['shorts', 'embed', 'live', 'v'].indexOf(p[1]) >= 0) m = p[2] || ''; }
+      }
+    } catch (e) { return ''; }
+    return /^[A-Za-z0-9_-]{11}$/.test(m) ? m : '';
+  }
+  function vidOf(f) {
+    var s = String(f.id || f.link || '').trim();
+    return /^[A-Za-z0-9_-]{11}$/.test(s) ? s : ytId(s);
+  }
+
+  var films = FILMES.map(function (f) {
+    var id = vidOf(f);
+    if (!id || !f.title) return null;
+    return {
+      id: id, title: String(f.title), synopsis: String(f.synopsis || ''), year: String(f.year || ''), duration: String(f.duration || ''),
+      row: String(f.row || 'Filmes'), tags: Array.isArray(f.tags) ? f.tags.map(String) : [], previewStart: Number(f.previewStart) || 0,
+      thumb: f.thumb ? String(f.thumb) : '', featured: !!f.featured
+    };
+  }).filter(Boolean);
+
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canHover = window.matchMedia && matchMedia('(hover: hover)').matches;
+
+  /* ---------- player ---------- */
+  function embedUrl(f, o) {
+    var p = ['rel=0', 'modestbranding=1', 'playsinline=1'];
+    if (o.autoplay) p.push('autoplay=1');
+    if (o.mute) p.push('mute=1');
+    if (o.bare) p.push('controls=0', 'disablekb=1', 'iv_load_policy=3', 'loop=1', 'playlist=' + f.id);
+    if (o.start) p.push('start=' + Math.floor(o.start));
+    return 'https://www.youtube-nocookie.com/embed/' + f.id + '?' + p.join('&');
+  }
+  function frame(f, o) {
+    var i = document.createElement('iframe');
+    i.src = embedUrl(f, o);
+    i.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen';
+    if (o.bare) { i.title = 'Prévia de ' + f.title; i.setAttribute('aria-hidden', 'true'); i.tabIndex = -1; }
+    else { i.title = f.title; i.className = 'player'; i.setAttribute('allowfullscreen', ''); }
+    return i;
+  }
+  function fitCover(i, box) {
+    var r = box.getBoundingClientRect(), w = r.width, h = r.height;
+    var cw = w, ch = w * 9 / 16;
+    if (ch < h) { ch = h; cw = h * 16 / 9; }
+    i.style.width = cw + 'px'; i.style.height = ch + 'px';
+    i.style.left = ((w - cw) / 2) + 'px'; i.style.top = ((h - ch) / 2) + 'px';
+  }
+
+  /* ---------- capa (arte em CSS + imagem do YouTube por cima) ---------- */
+  function paint(parent, f, big) {
+    parent.appendChild(el('div', 'art a' + (hash(f.title) % 6) + ' nf-art'));
+    var img = document.createElement('img');
+    img.className = 'nf-img';
+    img.alt = '';
+    img.decoding = 'async';
+    if (!big) img.loading = 'lazy';
+    var tried = false;
+    function fallback() {
+      if (big && !f.thumb && !tried) { tried = true; img.src = 'https://i.ytimg.com/vi/' + f.id + '/hqdefault.jpg'; }
+      else if (img.parentNode) img.parentNode.removeChild(img);
+    }
+    img.addEventListener('error', fallback);
+    img.addEventListener('load', function () { if (img.naturalWidth && img.naturalWidth <= 120) fallback(); });
+    img.src = f.thumb || ('https://i.ytimg.com/vi/' + f.id + (big ? '/maxresdefault.jpg' : '/hqdefault.jpg'));
+    parent.appendChild(img);
+  }
+
+  /* ---------- prévias ---------- */
+  var hoverTimer = null, hoverFrame = null, heroStop = null;
+  function stopHover() {
+    clearTimeout(hoverTimer);
+    if (hoverFrame && hoverFrame.parentNode) hoverFrame.parentNode.removeChild(hoverFrame);
+    hoverFrame = null;
+  }
+
+  /* ---------- peças ---------- */
+  function metaLine(f) {
+    var m = el('div', 'nf-meta');
+    [f.year, f.duration].filter(Boolean).forEach(function (t) { m.appendChild(el('span', null, t)); });
+    f.tags.slice(0, 3).forEach(function (t) { m.appendChild(el('span', 'chip sm', t)); });
+    return m;
+  }
+
+  function buildHero(f) {
+    var h = el('section', 'nf-hero');
+    h.setAttribute('aria-label', 'Filme em destaque');
+    paint(h, f, true);
+    var scrim = el('div', 'nf-scrim');
+    h.appendChild(scrim);
+    var b = el('div', 'nf-hero-body');
+    b.appendChild(el('p', 'eyebrow', 'Em destaque'));
+    b.appendChild(el('h2', 'nf-title', f.title));
+    if (f.year || f.duration || f.tags.length) b.appendChild(metaLine(f));
+    if (f.synopsis) b.appendChild(el('p', 'nf-syn', f.synopsis));
+    var acts = el('div', 'nf-actions');
+    var play = el('button', 'btn lg');
+    play.type = 'button';
+    play.appendChild(el('span', 'nf-tri', '▶'));
+    play.appendChild(el('span', null, 'Assistir'));
+    play.addEventListener('click', function () { openWatch(f, true, play); });
+    var info = el('button', 'btn ghost lg', 'Mais informações');
+    info.type = 'button';
+    info.addEventListener('click', function () { openWatch(f, false, info); });
+    acts.appendChild(play); acts.appendChild(info);
+    b.appendChild(acts);
+    h.appendChild(b);
+
+    if (PREVIEW_HERO && !reduce && 'IntersectionObserver' in window) {
+      var timer = null, pv = null;
+      heroStop = function () { clearTimeout(timer); if (pv && pv.parentNode) pv.parentNode.removeChild(pv); pv = null; };
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          clearTimeout(timer);
+          if (e.isIntersecting && e.intersectionRatio >= 0.4) {
+            if (!pv && $('nf-modal').hidden) timer = setTimeout(function () {
+              pv = frame(f, { autoplay: true, mute: true, bare: true, start: f.previewStart });
+              pv.className = 'nf-prev';
+              h.insertBefore(pv, scrim);
+              fitCover(pv, h);
+              pv.addEventListener('load', function () { setTimeout(function () { if (pv) pv.classList.add('on'); }, 900); });
+            }, PREVIEW_HERO_DELAY);
+          } else if (pv) { heroStop(); }
+        });
+      }, { threshold: [0, 0.4] }).observe(h);
+      window.addEventListener('resize', function () { if (pv) fitCover(pv, h); });
+    }
+    return h;
+  }
+
+  function buildCard(f, opts) {
+    var c = el('div', 'nf-card');
+    paint(c, f, false);
+    var cap = el('div', 'nf-cap');
+    cap.appendChild(el('b', null, f.title));
+    var sub = [f.year, f.duration].filter(Boolean).join(' · ');
+    if (sub) cap.appendChild(el('small', null, sub));
+    c.appendChild(cap);
+    var pl = el('span', 'nf-play', '▶');
+    pl.setAttribute('aria-hidden', 'true');
+    c.appendChild(pl);
+    var hit = el('button', 'nf-hit');
+    hit.type = 'button';
+    hit.setAttribute('aria-label', 'Assistir ' + f.title);
+    hit.addEventListener('click', function () { stopHover(); openWatch(f, true, (opts && opts.trigger) || hit); });
+    c.appendChild(hit);
+
+    if (PREVIEW_HOVER && !reduce && canHover && !(opts && opts.noPreview)) {
+      c.addEventListener('mouseenter', function () {
+        stopHover();
+        hoverTimer = setTimeout(function () {
+          var i = frame(f, { autoplay: true, mute: true, bare: true, start: f.previewStart });
+          i.className = 'nf-pv';
+          c.insertBefore(i, cap);
+          fitCover(i, c);
+          hoverFrame = i;
+          i.addEventListener('load', function () { setTimeout(function () { i.classList.add('on'); }, 700); });
+        }, PREVIEW_DELAY);
+      });
+      c.addEventListener('mouseleave', stopHover);
+    }
+    return c;
+  }
+
+  function buildRow(title, list) {
+    var row = el('section', 'nf-row');
+    var hb = el('div', 'hblock');
+    hb.appendChild(el('h2', null, title));
+    row.appendChild(hb);
+    var wrap = el('div', 'nf-rail-wrap');
+    var rail = el('div', 'nf-rail');
+    list.forEach(function (f) { rail.appendChild(buildCard(f)); });
+    wrap.appendChild(rail);
+
+    function mk(dir) {
+      var b = el('button', 'nf-arrow ' + (dir < 0 ? 'prev' : 'next'));
+      b.type = 'button';
+      b.setAttribute('aria-label', dir < 0 ? 'Voltar na fileira ' + title : 'Avançar na fileira ' + title);
+      b.innerHTML = '<svg aria-hidden="true"><use href="#' + (dir < 0 ? 'chev-l' : 'chev-r') + '"/></svg>';
+      b.addEventListener('click', function () { rail.scrollBy({ left: dir * rail.clientWidth * 0.85, behavior: 'smooth' }); });
+      return b;
+    }
+    var prev = mk(-1), next = mk(1);
+    wrap.appendChild(prev); wrap.appendChild(next);
+    function update() {
+      var can = rail.scrollWidth > rail.clientWidth + 4;
+      wrap.classList.toggle('can-scroll', can);
+      prev.disabled = rail.scrollLeft <= 4;
+      next.disabled = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 4;
+    }
+    rail.addEventListener('scroll', update, { passive: true });
+    wrap.addEventListener('mouseenter', update);
+    window.addEventListener('resize', update);
+    row.appendChild(wrap);
+    return row;
+  }
+
+  function render() {
+    var root = $('nf-root');
+    root.innerHTML = '';
+    if (!films.length) {
+      var e = el('div', 'empty');
+      e.appendChild(el('b', null, 'Nenhum filme por aqui'));
+      e.appendChild(el('span', null, 'Nenhum filme disponível no momento.'));
+      root.appendChild(e);
+      return;
+    }
+    var hero = films.filter(function (f) { return f.featured; })[0] || films[0];
+    root.appendChild(buildHero(hero));
+    var order = [], groups = {};
+    films.forEach(function (f) {
+      if (!groups[f.row]) { groups[f.row] = []; order.push(f.row); }
+      groups[f.row].push(f);
+    });
+    order.forEach(function (name) { root.appendChild(buildRow(name, groups[name])); });
+  }
+
+  /* ---------- janela "Assistir" ---------- */
+  var lastTrigger = null;
+  function openWatch(f, autoplay, trigger) {
+    stopHover();
+    if (heroStop) heroStop();
+    if (trigger) lastTrigger = trigger;
+    var m = $('nf-modal'), card = $('nf-watch');
+    card.innerHTML = '';
+
+    var x = el('button', 'modal-x', '✕');
+    x.type = 'button';
+    x.setAttribute('aria-label', 'Fechar');
+    x.addEventListener('click', closeWatch);
+    card.appendChild(x);
+
+    var pl = el('div', 'nf-player');
+    pl.appendChild(frame(f, { autoplay: autoplay }));
+    card.appendChild(pl);
+
+    var body = el('div', 'modal-body');
+    var hb = el('div', 'hblock');
+    hb.appendChild(el('p', 'eyebrow', f.row));
+    var h = el('h2', null, f.title);
+    h.id = 'nf-title';
+    hb.appendChild(h);
+    body.appendChild(hb);
+    if (f.year || f.duration || f.tags.length) body.appendChild(metaLine(f));
+    if (f.synopsis) body.appendChild(el('p', null, f.synopsis));
+
+    var others = films.filter(function (o) { return o.id !== f.id; }).slice(0, 8);
+    if (others.length) {
+      var mh = el('div', 'hblock');
+      mh.appendChild(el('h2', null, 'Mais filmes'));
+      mh.style.marginTop = '8px';
+      body.appendChild(mh);
+      var grid = el('div', 'nf-more');
+      others.forEach(function (o) {
+        var c = buildCard(o, { noPreview: true });
+        var hit = c.querySelector('.nf-hit');
+        var clone = hit.cloneNode(true);
+        hit.parentNode.replaceChild(clone, hit);
+        clone.addEventListener('click', function () { openWatch(o, true, null); card.scrollTop = 0; });
+        grid.appendChild(c);
+      });
+      body.appendChild(grid);
+    }
+    card.appendChild(body);
+
+    m.hidden = false;
+    document.body.style.overflow = 'hidden';
+    x.focus();
+  }
+  function closeWatch() {
+    var m = $('nf-modal');
+    if (m.hidden) return;
+    m.hidden = true;
+    $('nf-watch').innerHTML = '';
+    document.body.style.overflow = '';
+    if (lastTrigger && document.body.contains(lastTrigger)) lastTrigger.focus();
+  }
+  $('nf-modal').addEventListener('click', function (e) { if (e.target === $('nf-modal')) closeWatch(); });
+  document.addEventListener('keydown', function (e) {
+    var m = $('nf-modal');
+    if (m.hidden) return;
+    if (e.key === 'Escape') { closeWatch(); return; }
+    if (e.key === 'Tab') {
+      var f = Array.prototype.slice.call(m.querySelectorAll('button, a[href], iframe')).filter(function (n) { return n.tabIndex !== -1; });
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  render();
+})();
+
+/* ============================================================
+   Botões de copiar dos contatos
+   ============================================================ */
+(function () {
+  function fallbackCopy(text) {
+    var t = document.createElement('textarea');
+    t.value = text;
+    t.setAttribute('readonly', '');
+    t.style.position = 'fixed'; t.style.opacity = '0';
+    document.body.appendChild(t);
+    t.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(t);
+    return ok;
+  }
+  Array.prototype.slice.call(document.querySelectorAll('[data-copy-value]')).forEach(function (btn) {
+    var label = btn.getAttribute('aria-label');
+    var use = btn.querySelector('use');
+    var timer = null;
+    function done(ok) {
+      clearTimeout(timer);
+      btn.classList.toggle('ok', ok);
+      if (use) use.setAttribute('href', ok ? '#i-check' : '#i-copy');
+      btn.setAttribute('aria-label', ok ? 'Copiado' : 'Não foi possível copiar');
+      btn.title = ok ? 'Copiado' : 'Não foi possível copiar';
+      timer = setTimeout(function () {
+        btn.classList.remove('ok');
+        if (use) use.setAttribute('href', '#i-copy');
+        btn.setAttribute('aria-label', label);
+        btn.title = label;
+      }, 1600);
+    }
+    btn.addEventListener('click', function () {
+      var text = btn.getAttribute('data-copy-value');
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(fallbackCopy(text)); });
+      } else { done(fallbackCopy(text)); }
+    });
+  });
 })();
 </script>
 
