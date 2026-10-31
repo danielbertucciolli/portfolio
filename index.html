@@ -558,7 +558,12 @@ button.art-icon:hover { filter: brightness(1.15); }
 .nf-watch { position: relative; width: 100%; max-width: 980px; max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); overflow-y: auto; padding: 0; display: flex; flex-direction: column; }
 .nf-player { aspect-ratio: 16 / 9; background: #000; width: 100%; max-width: 100%; position: relative; }
 .nf-player .player { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; }
-.nf-watch .modal-x { top: 10px; right: 10px; z-index: 8; }
+.nf-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 10px 8px 22px; background: var(--surface-in); border-bottom: 1px solid var(--line); }
+.nf-watch .modal-x { position: static; flex: none; }
+.art .nf-img { z-index: -1; }
+.art .nf-pv { z-index: -1; }
+.btn .nf-tri { font-size: 0.8em; }
+
 .nf-more { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 12px; }
 .nf-more .nf-card { flex: none; }
 
@@ -2269,7 +2274,66 @@ console.log(tema);</pre>
    ============================================================ */
 (function () {
   var FILMES = [
-    { id: 'ThSHzNG7Qa8', title: 'A Garota Ideal', year: '2007', duration: '', row: 'Filmes completos', tags: ['Dublado', 'Filme completo'], synopsis: 'Versão dublada em português.', featured: true }
+    {
+      id: 'ThSHzNG7Qa8',
+      title: 'A Garota Ideal',
+      year: '2007',
+      duration: '1h 33m',
+      row: 'Filmes completos',
+      tags: ['Dublado', 'Filme completo'],
+      synopsis: 'Versão dublada em português.',
+      featured: true
+    },
+    {
+      id: 'cQWtq6ir-fE',
+      title: 'Super-Herói: O Filme',
+      year: '2008',
+      duration: '1h 18m',
+      row: 'Filmes completos',
+      tags: ['Dublado', 'Comédia', 'Paródia'],
+      synopsis: 'Paródia hilária dos filmes de super-heróis clássicos.',
+      featured: false
+    },
+    {
+      id: 'fUtAamtCBew',
+      title: 'O Auto da Compadecida',
+      year: '2000',
+      duration: '2h 38m',
+      row: 'Filmes completos',
+      tags: ['Nacional', 'Comédia', 'Clássico'],
+      synopsis: 'As aventuras dos nordestinos João Grilo e Chicó em sua luta pela sobrevivência.',
+      featured: true
+    },
+    {
+      id: 'fjT-CtR4AWs',
+      title: 'O Homem que Copiava',
+      year: '2003',
+      duration: '2h 05m',
+      row: 'Filmes completos',
+      tags: ['Nacional', 'Drama', 'Romance'],
+      synopsis: 'André, um operador de fotocopiadora em Porto Alegre, apaixona-se por sua vizinha.',
+      featured: false
+    },
+    {
+      id: '8kaY0m4p2IY',
+      title: 'Rebelde com Causa',
+      year: '2009',
+      duration: '1h 26m',
+      row: 'Filmes completos',
+      tags: ['Dublado', 'Comédia Dramática'],
+      synopsis: 'As peripécias de Nick Twisp em sua jornada para conquistar a garota dos seus sonhos.',
+      featured: false
+    },
+    {
+      id: 'wUk93rpBoQU',
+      title: 'Procura-se um Amigo para o Fim do Mundo',
+      year: '2012',
+      duration: '1h 34m',
+      row: 'Filmes completos',
+      tags: ['Dublado', 'Comédia', 'Drama'],
+      synopsis: 'Com um asteroide prestes a destruir a Terra, um homem embarca em uma viagem inesperada.',
+      featured: false
+    }
   ];
 
   var PREVIEW_HERO = true;        // prévia muda no destaque do topo
@@ -2342,8 +2406,8 @@ console.log(tema);</pre>
   }
 
   /* ---------- capa (arte em CSS + imagem do YouTube por cima) ---------- */
-  function paint(parent, f, big) {
-    parent.appendChild(el('div', 'art a' + (hash(f.title) % 6) + ' nf-art'));
+  function paint(parent, f, big, noArt) {
+    if (!noArt) parent.appendChild(el('div', 'art a' + (hash(f.title) % 6) + ' nf-art'));
     var img = document.createElement('img');
     img.className = 'nf-img';
     img.alt = '';
@@ -2456,36 +2520,80 @@ console.log(tema);</pre>
     return c;
   }
 
+  var BRAND = '@daniel.bertucciolli.dev';
+
+  function buildBanner(f) {
+    var c = el('article', 'card banner');
+    var art = el('div', 'art a' + (hash(f.title) % 6));
+    paint(art, f, false, true);
+    art.appendChild(el('span', 'art-badge', f.tags[0] || 'Filme'));
+    var ic = el('button', 'art-icon', '▶');
+    ic.type = 'button';
+    ic.setAttribute('aria-label', 'Assistir ' + f.title);
+    ic.addEventListener('click', function () { stopHover(); openWatch(f, true, ic); });
+    art.appendChild(ic);
+    var meta = [f.year, f.duration].filter(Boolean).join(' · ');
+    if (meta) art.appendChild(el('span', 'art-meta', meta));
+    art.appendChild(el('span', 'art-title', f.title));
+    c.appendChild(art);
+
+    if (PREVIEW_HOVER && !reduce && canHover) {
+      art.addEventListener('mouseenter', function () {
+        stopHover();
+        hoverTimer = setTimeout(function () {
+          var i = frame(f, { autoplay: true, mute: true, bare: true, start: f.previewStart });
+          i.className = 'nf-pv';
+          art.insertBefore(i, art.querySelector('.art-badge'));
+          fitCover(i, art);
+          hoverFrame = i;
+          i.addEventListener('load', function () { setTimeout(function () { i.classList.add('on'); }, 700); });
+        }, PREVIEW_DELAY);
+      });
+      art.addEventListener('mouseleave', stopHover);
+    }
+
+    var b = el('div', 'banner-body');
+    var top = el('div', 'post-top');
+    top.appendChild(el('span', 'tag', 'Filme'));
+    top.appendChild(el('span', 'pill ghost', (f.duration || f.year || 'FILME').toUpperCase()));
+    b.appendChild(top);
+    b.appendChild(el('h3', null, f.title));
+    if (f.synopsis) b.appendChild(el('p', 'desc', f.synopsis));
+    if (f.tags.length) {
+      var tg = el('div', 'chips');
+      f.tags.slice(0, 5).forEach(function (t) { tg.appendChild(el('span', 'chip sm', t)); });
+      b.appendChild(tg);
+    }
+    var foot = el('div', 'foot');
+    foot.appendChild(el('span', 'handle', BRAND));
+    var acts = el('div', 'banner-actions');
+    var det = el('button', 'foot-btn');
+    det.type = 'button';
+    det.appendChild(el('span', null, 'Detalhes'));
+    var dot = el('span', 'dot');
+    dot.innerHTML = '<svg aria-hidden="true"><use href="#arrow-r"/></svg>';
+    det.appendChild(dot);
+    det.addEventListener('click', function () { openWatch(f, false, det); });
+    var play = el('button', 'btn sm');
+    play.type = 'button';
+    play.appendChild(el('span', 'nf-tri', '▶'));
+    play.appendChild(el('span', null, 'Assistir'));
+    play.addEventListener('click', function () { stopHover(); openWatch(f, true, play); });
+    acts.appendChild(det); acts.appendChild(play);
+    foot.appendChild(acts);
+    b.appendChild(foot);
+    c.appendChild(b);
+    return c;
+  }
+
   function buildRow(title, list) {
     var row = el('section', 'nf-row');
     var hb = el('div', 'hblock');
     hb.appendChild(el('h2', null, title));
     row.appendChild(hb);
-    var wrap = el('div', 'nf-rail-wrap');
-    var rail = el('div', 'nf-rail');
-    list.forEach(function (f) { rail.appendChild(buildCard(f)); });
-    wrap.appendChild(rail);
-
-    function mk(dir) {
-      var b = el('button', 'nf-arrow ' + (dir < 0 ? 'prev' : 'next'));
-      b.type = 'button';
-      b.setAttribute('aria-label', dir < 0 ? 'Voltar na fileira ' + title : 'Avançar na fileira ' + title);
-      b.innerHTML = '<svg aria-hidden="true"><use href="#' + (dir < 0 ? 'chev-l' : 'chev-r') + '"/></svg>';
-      b.addEventListener('click', function () { rail.scrollBy({ left: dir * rail.clientWidth * 0.85, behavior: 'smooth' }); });
-      return b;
-    }
-    var prev = mk(-1), next = mk(1);
-    wrap.appendChild(prev); wrap.appendChild(next);
-    function update() {
-      var can = rail.scrollWidth > rail.clientWidth + 4;
-      wrap.classList.toggle('can-scroll', can);
-      prev.disabled = rail.scrollLeft <= 4;
-      next.disabled = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 4;
-    }
-    rail.addEventListener('scroll', update, { passive: true });
-    wrap.addEventListener('mouseenter', update);
-    window.addEventListener('resize', update);
-    row.appendChild(wrap);
+    var grid = el('div', 'banners');
+    list.forEach(function (f) { grid.appendChild(buildBanner(f)); });
+    row.appendChild(grid);
     return row;
   }
 
@@ -2518,11 +2626,14 @@ console.log(tema);</pre>
     var m = $('nf-modal'), card = $('nf-watch');
     card.innerHTML = '';
 
+    var bar = el('div', 'nf-bar');
+    bar.appendChild(el('span', 'tag', f.row));
     var x = el('button', 'modal-x', '✕');
     x.type = 'button';
-    x.setAttribute('aria-label', 'Fechar');
+    x.setAttribute('aria-label', 'Fechar janela');
     x.addEventListener('click', closeWatch);
-    card.appendChild(x);
+    bar.appendChild(x);
+    card.appendChild(bar);
 
     var pl = el('div', 'nf-player');
     pl.appendChild(frame(f, { autoplay: autoplay }));
